@@ -1,0 +1,79 @@
+
+TRACK1/MeasLen = 1
+TRACK1/RecTmp - 199
+TRACK1/WavLen
+MASTER/Tempo = 100
+MASTER/LpLen = 1
+RHYTHM/Beat
+
+WavLen = 221381
+
+NBeats = WavLen * TrueBpm / 2646000 = 221381 * 100 / 2646000 = 8.3
+8 = 221381 * bpm / 2646000
+bpm = 95.617
+
+8 = x * 95.6 / 2646000 , x = 221422...
+
+WavLen
+
+TRACK1/MeasLen // num measures in entire loop
+TRACK1/RecTmp
+TRACK1/WavLen
+MASTER/Tempo
+MASTER/LpLen
+RHYTHM/Beat 2 = 4/4
+
+In this example we can see that WavLen has the value 2592000
+We also can see the bogus measure count: MeasLen = LpLen = 32
+We also can see the bogus tempo: RecTmp = Tempo = 1306
+(tempo are tenths of BPM)
+   
+The total number of beats in the track is Nbeats = WavLen * TrueBPM / 2646000
+In the example we have Wavlen = 2592000 and TrueBPM = 98, which leads to Nbeats = 96 beats (quarter notes)
+Knowing the time signature is 4/4, the total number of measures in the track is Nmeasures = Nbeats / 4 = 24 measures
+If the time signature was 3/4 we'd have to divide by 3. If it was 5/8 we'd have to divide by 2.5
+
+At this point, Nmeasures MUST be an integer.
+If the result of the calculation is a floating point number,
+ this means either that the prerequisites are not met or that the track's author has been negligent wrt timing consistency. Anyway, if Nmeasures is fractional, round it to the nearest integer.
+  Never EVER insert a floating point number into the data files!
+
+Now is the time to modify the file
+Set attributes MeasLen and LpLen to the value Nmeasures, i.e: replace 32 with 24
+Set attributes RecTmp and Tempo to TrueBPM*10, i.e: replace 1306 with 980 
+
+id=26
+
+WavLen 482952
+NBeats = WavLen * TrueBpm / 2646000
+NBeats = 482952 * 100 / 2646000
+ = 18.25
+ // round to 18 and calc bpm
+ 18 = 482952 * bpm / 2646000
+ bpm = 98.6
+ // now tweak wavelen
+ 18 = len * 98.6 / 2646000
+ len = 483042
+
+#24
+wavelen = 1281008
+NBeats@100 = wavelen * 100 / 2646000 = 48.41 # round to 48 (12 meas) and calc bpm
+bpmRounded = NBeatsRounded * 2646000 / wavelen = 99.14 # round to 99
+waveLenRounded =  NBeatsRounded * 2646000 / bpmRounded = 1282909
+
+#25
+NBeats@100 = wavelen * 100 / 2646000 = 8.37beats, round to 8
+bpmRounded = NBeatsRounded * 2646000 / wavelen = 95.6
+waveLenRounded = NBeatsRounded * 2646000 / bpmRounded =
+
+#1
+wavelen = 10232097
+bpm = 128
+NBeats = wavelen * bpm / 2646000 = 496 (rounded up) (124M)
+waveLenRounded = 496 * 2646000 / 128 = 10253250
+
+#4
+wavelen = 1824768
+bpm = 123
+NBeats = wavelen * bpm / 2646000 = 84.8 -> 88 (22M)
+waveLenRounded = 88 * 2646000 / 123 = 1893073

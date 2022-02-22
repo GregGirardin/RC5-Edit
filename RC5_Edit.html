@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RC5 Config Editor</title>
+<style>
+
+.accordion
+{
+  border: 2px solid white;
+  background-color: #def;
+  color: #444;
+  padding: 6px;
+  text-align: left;
+  outline: none;
+  font-size: 16px;
+  transition: 0.2s;
+}
+
+.fixedFont
+{
+  font-family: monospace;
+}
+
+.panel
+{
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  font-size: 20px;
+  background-color: #fee;
+  text-align: left;
+}
+
+</style>
+</head>
+
+<body align="left">
+<section>
+<div>
+<input type='file' class='css_menuButton' id='openConfigAction' style='display:none'>
+<button class='css_menuButton' id='openConfigButton' onclick='openConfig();'>Open</button>
+<button class='css_menuButton' id='saveConfigButton' onclick='saveConfig();'>Save</button>
+<hr>
+<div id='fileData'> </div>
+</div>
+</section>
+
+<script>
+var configEditedFlag = false;
+var rc5_XML;
+var memEntries;
+
+//////////////////////////// //////////////////////////// ////////////////////////////
+
+class rc5Config
+{
+}
+
+class rc5Entry
+{
+  constructor( name, bpm, measures )
+  {
+    this.name = name;
+    this.bpm = bpm;
+    this.measures = measures;
+  }
+}
+
+//////////////////////////// //////////////////////////// ////////////////////////////
+//////////////////////////// //////////////////////////// ////////////////////////////
+window.onload = rc5EditInit;
+
+/////////////// /////////////// /////////////// ///////////////
+function rc5EditInit()
+{
+  document.getElementById( 'openConfigAction' ).addEventListener( 'change', openConfigFile, false );
+}
+
+function openConfig()
+{
+  if( configEditedFlag )
+    if( !window.confirm( "Unsaved Edits. Continue?" ) )
+      return;
+
+  configEditedFlag = false;
+  document.getElementById( 'openConfigAction' ).click(); // this little hack is so we can css the open button
+}
+
+function openConfigFile( e )
+{
+  var file = e.target.files[ 0 ];
+  if( !file )
+    return;
+  if( file.name != "MEMORY1.RC0" )
+  {
+    alert( "File name must be MEMORY1.RC0" );
+    return;
+  }
+
+  var reader = new FileReader();
+  reader.onload = function( e )
+  {
+    var parser = new DOMParser();
+    rc5_XML = parser.parseFromString( e.target.result, "text/xml" );
+    memEntries = rc5_XML.getElementsByTagName( "mem" );
+
+    generateConfigHTML();
+
+    document.getElementById( 'openConfigAction' ).value = null;
+  }
+
+  reader.readAsText( file );
+}
+
+function generateConfigHTML()
+{
+  var accords;
+  var tempHtml = "";
+
+  for( var memLoc = 0;memLoc <= memEntries.length;memLoc++ ) // valid memLoc < 1 - 99 > 
+  {
+    var memString;
+
+    if( ( memLoc > 0 ) && ( ( memLoc % 10 ) == 0 ) )
+      tempHtml += "</br>";
+
+    var validLoc = ( ( memLoc >= 1 ) && ( memLoc <= 99 ) ) ? true : false;
+
+    tempHtml += "<button class='accordion'>";
+    if( validLoc )
+      memString = memLoc.toString();
+    else
+      memString = "--"; // not a valid memory slot
+
+    if( memString.length == 1 )
+      memString = "0" + memString;
+    tempHtml += memString + "</button>\n";
+
+    if( !validLoc )
+      continue; // 1 - 99.
+
+    var entry = memEntries[ memLoc - 1 ]; // entries are 0 based.
+
+    var elem = entry.getElementsByTagName( "NAME" );
+    var loopName = ""; // "\"";
+
+    for( var ix = 0;ix < 12;ix++ )
+      loopName += String.fromCharCode( parseInt( elem[ 0 ].childNodes[ 1 + ix * 2 ].innerHTML ) );
+
+    var elem = entry.getElementsByTagName( "TRACK1" );
+    // console.log( "TRACK1", elem[ 0 ].childNodes );
+    var PlyLvl  = parseInt( elem[ 0 ].childNodes[  3 ].innerHTML );
+    var Pan     = parseInt( elem[ 0 ].childNodes[  5 ].innerHTML );
+    var One     = parseInt( elem[ 0 ].childNodes[  7 ].innerHTML );
+    var MeasLen = parseInt( elem[ 0 ].childNodes[ 17 ].innerHTML );
+    var RecTmp  = parseInt( elem[ 0 ].childNodes[ 21 ].innerHTML );
+    var WavLen  = parseInt( elem[ 0 ].childNodes[ 25 ].innerHTML );
+
+    var elem      = entry.getElementsByTagName( "MASTER" );
+    //console.log( "MASTER", elem[ 0 ].childNodes );
+
+    var Tempo     = parseInt( elem[ 0 ].childNodes[ 1 ].innerHTML );
+    var FadeTime  = parseInt( elem[ 0 ].childNodes[ 9 ].innerHTML );
+
+    var elem = entry.getElementsByTagName( "RHYTHM" );
+    var Beat = parseInt( elem[ 0 ].childNodes[ 13 ].innerHTML );
+
+    tempHtml += "<div class='panel'>\n";
+    tempHtml += "Name: <input contenteditable='true' id='sampleName" + memString + "' maxlength='12' value='" + loopName + "'><br>\n";
+    tempHtml += "PlyLvl: <input type='number' id='samplePlyLvl" + memString + "' min='0' max='200' value='" + PlyLvl + "'><br>\n";
+    tempHtml += "Pan: <input type='number' id='samplePan" + memString + "' min='-50' max='50' value='" + Pan + "'><br>\n";
+
+    var c = One ? "checked" : "";
+    tempHtml += "One: <input type='checkbox' id='sampleOne" + memString + "' " + c + "><br>\n";
+    tempHtml += "MeasLen: <input type='number' id='sampleMeasLen" + memString + "' min='1' max='256' value='" + MeasLen + "'><br>\n";
+    tempHtml += "Recorded Tempo: <input type='number' id='sampleRecTmp" + memString + "' min='20' max='300' value='" + RecTmp / 10 + "'><br>\n";
+    tempHtml += "Tempo: <input type='number' id='sampleTempo" + memString + "' min='20' max='300' value='" + Tempo / 10 + "'><br>\n";
+    tempHtml += "WavLen: <input type='number' id='sampleWavLen" + memString + "' min='512' max='10000000' value='" + WavLen + "'><br>\n";
+
+    tempHtml += "<button class='css_menuButton' id='convertToAsync' onclick='convertToAsync(\"" + memString + "\");'>Async</button>";
+    tempHtml += "</div>\n";
+  }
+
+  document.getElementById( 'fileData' ).innerHTML = tempHtml;
+
+  accords = document.getElementsByClassName( "accordion" );
+
+  for( var i = 1;i < accords.length;i++ ) // Hack: start at 1 because first accordin is invalid "memory 00"
+  {
+    accords[ i ].addEventListener( "click", function() { accordionClick( this ); } );
+    accords[ i ].nextElementSibling.addEventListener( "click", function() { this.previousElementSibling.scrollIntoView(); } );
+    accords[ i ].accIndex = i;
+  }
+}
+
+function accordionClick( elem )
+{
+  // console.log( "accordionClick" );
+
+  var wasOpen = elem.classList.contains( "active" );
+  var panel = elem.nextElementSibling;
+
+  if( wasOpen )
+  {
+    panel.style.display = "none"; 
+    elem.classList.remove( "active" );
+  }
+  else
+  {
+    panel.style.display = "block";
+    elem.classList.add( "active" );
+    elem.scrollIntoView();
+  }
+}
+
+function convertToAsync( memString )
+{
+  var memIndex = parseInt( memString );
+
+  // Change the html,  the XML when saving.
+  if( !memIndex )
+    return;
+
+  var entry = memEntries[ memIndex - 1 ]; // entries are 0 based.
+  var elem = entry.getElementsByTagName( "TRACK1" );
+  var waveLen = parseInt( elem[ 0 ].childNodes[ 25 ].innerHTML );
+
+  var bpm = 100; // can pick any bpm for async samples
+  var nBeats = parseInt( waveLen * bpm / 2646000 );
+  var nBeats4 = nBeats + 3 - nBeats % 4; // round up to a factor of 4 (4bpm)
+
+  var waveLenAdj = nBeats4 * 2646000 / bpm;
+
+  var elem = document.getElementById( "sampleMeasLen" + memString );
+
+  elem.value = nBeats4 / 4;
+  var elem = document.getElementById( "sampleRecTmp" + memString );
+  elem.value = 100.0; // 100.0 bpm
+  var elem = document.getElementById( "sampleTempo" + memString );
+  elem.value = 100.0;
+  var elem = document.getElementById( "sampleWavLen" + memString );
+  elem.value = waveLenAdj;
+}
+
+function saveConfig()
+{
+  console.log( "Save." );
+
+  // apply all html elements to the XLM
+  for( var memLoc = 1;memLoc <= memEntries.length;memLoc++ ) // valid memLoc < 1 - 99 > 
+  {
+    var memString = memLoc.toString();
+    if( memString.length == 1 )
+      memString = "0" + memString;
+
+    var elem = document.getElementById( "sampleRecTmp" + memString );
+    var value = elem.value;
+
+  }
+
+  // save the XLM
+}
+
+
+</script>
+</body>
+</html>
