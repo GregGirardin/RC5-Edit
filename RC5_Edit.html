@@ -52,22 +52,6 @@ var rc5_XML;
 var memEntries;
 
 //////////////////////////// //////////////////////////// ////////////////////////////
-
-class rc5Config
-{
-}
-
-class rc5Entry
-{
-  constructor( name, bpm, measures )
-  {
-    this.name = name;
-    this.bpm = bpm;
-    this.measures = measures;
-  }
-}
-
-//////////////////////////// //////////////////////////// ////////////////////////////
 //////////////////////////// //////////////////////////// ////////////////////////////
 window.onload = rc5EditInit;
 
@@ -92,11 +76,11 @@ function openConfigFile( e )
   var file = e.target.files[ 0 ];
   if( !file )
     return;
-  if( file.name != "MEMORY1.RC0" )
-  {
-    alert( "File name must be MEMORY1.RC0" );
-    return;
-  }
+  // if( file.name != "MEMORY1.RC0" )
+  // {
+  //   alert( "File name must be MEMORY1.RC0" );
+  //   return;
+  // }
 
   var reader = new FileReader();
   reader.onload = function( e )
@@ -143,7 +127,7 @@ function generateConfigHTML()
     var entry = memEntries[ memLoc - 1 ]; // entries are 0 based.
 
     var elem = entry.getElementsByTagName( "NAME" );
-    var loopName = ""; // "\"";
+    var loopName = "";
 
     for( var ix = 0;ix < 12;ix++ )
       loopName += String.fromCharCode( parseInt( elem[ 0 ].childNodes[ 1 + ix * 2 ].innerHTML ) );
@@ -157,8 +141,8 @@ function generateConfigHTML()
     var RecTmp  = parseInt( elem[ 0 ].childNodes[ 21 ].innerHTML );
     var WavLen  = parseInt( elem[ 0 ].childNodes[ 25 ].innerHTML );
 
-    var elem      = entry.getElementsByTagName( "MASTER" );
-    //console.log( "MASTER", elem[ 0 ].childNodes );
+    var elem = entry.getElementsByTagName( "MASTER" );
+    // console.log( "MASTER", elem[ 0 ].childNodes );
 
     var Tempo     = parseInt( elem[ 0 ].childNodes[ 1 ].innerHTML );
     var FadeTime  = parseInt( elem[ 0 ].childNodes[ 9 ].innerHTML );
@@ -167,18 +151,30 @@ function generateConfigHTML()
     var Beat = parseInt( elem[ 0 ].childNodes[ 13 ].innerHTML );
 
     tempHtml += "<div class='panel'>\n";
-    tempHtml += "Name: <input contenteditable='true' id='sampleName" + memString + "' maxlength='12' value='" + loopName + "'><br>\n";
-    tempHtml += "PlyLvl: <input type='number' id='samplePlyLvl" + memString + "' min='0' max='200' value='" + PlyLvl + "'><br>\n";
-    tempHtml += "Pan: <input type='number' id='samplePan" + memString + "' min='-50' max='50' value='" + Pan + "'><br>\n";
+    tempHtml += "Name: <input contenteditable='true' id='sampleName" + 
+                memString + "' maxlength='12' value='" + loopName + "'><br>\n";
+    tempHtml += "PlyLvl: <input type='number' id='samplePlyLvl" +
+                memString + "' min='0' max='200' value='" + PlyLvl + "'><br>\n";
+    tempHtml += "Pan: <input type='number' id='samplePan" +
+                memString + "' min='-50' max='50' value='" + Pan + "'><br>\n";
 
     var c = One ? "checked" : "";
-    tempHtml += "One: <input type='checkbox' id='sampleOne" + memString + "' " + c + "><br>\n";
-    tempHtml += "MeasLen: <input type='number' id='sampleMeasLen" + memString + "' min='1' max='256' value='" + MeasLen + "'><br>\n";
-    tempHtml += "Recorded Tempo: <input type='number' id='sampleRecTmp" + memString + "' min='20' max='300' value='" + RecTmp / 10 + "'><br>\n";
-    tempHtml += "Tempo: <input type='number' id='sampleTempo" + memString + "' min='20' max='300' value='" + Tempo / 10 + "'><br>\n";
-    tempHtml += "WavLen: <input type='number' id='sampleWavLen" + memString + "' min='512' max='10000000' value='" + WavLen + "'><br>\n";
+    tempHtml += "One: <input type='checkbox' id='sampleOne" +
+                memString + "' " + c + "><br>\n";
+    tempHtml += "MeasLen: <input type='number' id='sampleMeasLen" +
+                memString + "' min='1' max='256' value='" + MeasLen + "'><br>\n";
+    tempHtml += "Recorded Tempo: <input type='number' id='sampleRecTmp" +
+                memString + "' min='20' max='300' value='" + RecTmp / 10 + "'><br>\n";
+    tempHtml += "WavLen: <input type='number' id='sampleWavLen" +
+                memString + "' min='512' max='10000000' value='" + WavLen + "'><br>\n";
 
-    tempHtml += "<button class='css_menuButton' id='convertToAsync' onclick='convertToAsync(\"" + memString + "\");'>Async</button>";
+    tempHtml += "Tempo: <input type='number' id='sampleTempo" +
+                memString + "' min='20' max='300' value='" + Tempo / 10 + "'><br>\n";
+    tempHtml += "Fade: <input type='number' id='sampleFadeTime" +
+                memString + "' min='1' max='10' value='" + FadeTime + "'><br>\n";
+
+    tempHtml += "<button class='css_menuButton' id='convertToAsync' onclick='convertToAsync(\"" +
+                memString + "\");'>Async</button>";
     tempHtml += "</div>\n";
   }
 
@@ -214,6 +210,7 @@ function accordionClick( elem )
   }
 }
 
+// If a sample is asynchronous, find values to make prevent RC5 artifacts.
 function convertToAsync( memString )
 {
   var memIndex = parseInt( memString );
@@ -245,8 +242,6 @@ function convertToAsync( memString )
 
 function saveConfig()
 {
-  console.log( "Save." );
-
   // apply all html elements to the XLM
   for( var memLoc = 1;memLoc <= memEntries.length;memLoc++ ) // valid memLoc < 1 - 99 > 
   {
@@ -254,12 +249,49 @@ function saveConfig()
     if( memString.length == 1 )
       memString = "0" + memString;
 
-    var elem = document.getElementById( "sampleRecTmp" + memString );
-    var value = elem.value;
+    var entry = memEntries[ memLoc - 1 ]; // entries are 0 based.
 
+    var elem = entry.getElementsByTagName( "NAME" );
+    var docElem = document.getElementById( "sampleName" + memString );
+
+    elem = entry.getElementsByTagName( "TRACK1" );
+    docElem = document.getElementById( "samplePlyLvl" + memString );
+    elem[ 0 ].childNodes[ 3 ].innerHTML = docElem.value.toString();
+    docElem = document.getElementById( "samplePan" + memString );
+    elem[ 0 ].childNodes[ 5 ].innerHTML = docElem.value.toString();
+    docElem = document.getElementById( "sampleOne" + memString );
+    elem[ 0 ].childNodes[ 7 ].innerHTML = docElem.value.toString();
+    docElem = document.getElementById( "sampleMeasLen" + memString );
+    elem[ 0 ].childNodes[ 17 ].innerHTML = docElem.value.toString();
+    docElem = document.getElementById( "sampleRecTmp" + memString );
+    elem[ 0 ].childNodes[ 21 ].innerHTML = docElem.value.toString();
+    docElem = document.getElementById( "sampleWavLen" + memString );
+    elem[ 0 ].childNodes[ 25 ].innerHTML = docElem.value.toString();
+
+    elem = entry.getElementsByTagName( "MASTER" );
+    docElem = document.getElementById( "sampleTempo" + memString );
+    elem[ 0 ].childNodes[ 1 ].innerHTML = docElem.value.toString();
+    docElem = document.getElementById( "sampleFadeTime" + memString );
+    elem[ 0 ].childNodes[ 9 ].innerHTML = docElem.value.toString();
+
+    elem = entry.getElementsByTagName( "RHYTHM" );
+    elem[ 0 ].childNodes[ 13 ].innerHTML = "2"; // 4/4
   }
 
-  // save the XLM
+  console.log( rc5_XML );
+
+  // save the XLM file
+  const a = document.createElement( 'a' );
+
+  var serializer = new XMLSerializer();
+  var xmlString = serializer.serializeToString( rc5_XML );
+
+  const file = new Blob( [ xmlString ], { type: 'text/plain' } );
+  
+  a.href = URL.createObjectURL( file );
+  a.download = "MEMORY1.RC0";
+  a.click();
+	URL.revokeObjectURL( a.href );
 }
 
 
