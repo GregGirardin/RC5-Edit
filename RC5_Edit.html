@@ -97,6 +97,20 @@ function openConfigFile( e )
   reader.readAsText( file );
 }
 
+var startModes = [ "Immediate", "FadeIn" ];
+var stopModes = [ "Immediate", "FadeOut", "LoopEnd" ];
+var dubModes = [ "Overdub", "Replace" ];
+var fadeTimes = [ "1/16", "1/8", "1/4", "1/2", "1M", "2M", "4M" ];
+
+function getEntryIx( array, entry )
+{
+  for( var ix = 0;ix < array.length;ix++ )
+    if( array[ ix ] == entry )
+      return ix;
+  
+  return -1;
+}
+
 function generateConfigHTML()
 {
   var accords;
@@ -133,24 +147,29 @@ function generateConfigHTML()
       loopName += String.fromCharCode( parseInt( elem[ 0 ].childNodes[ 1 + ix * 2 ].innerHTML ) );
 
     var elem = entry.getElementsByTagName( "TRACK1" );
-    // console.log( "TRACK1", elem[ 0 ].childNodes );
+    // if( memLoc == 1 )
+    //  console.log( "TRACK1", elem[ 0 ].childNodes );
     var PlyLvl  = parseInt( elem[ 0 ].childNodes[  3 ].innerHTML );
     var Pan     = parseInt( elem[ 0 ].childNodes[  5 ].innerHTML );
     var One     = parseInt( elem[ 0 ].childNodes[  7 ].innerHTML );
+    var StrtMod = parseInt( elem[ 0 ].childNodes[  9 ].innerHTML );
+    var StpMod  = parseInt( elem[ 0 ].childNodes[ 11 ].innerHTML );
     var MeasLen = parseInt( elem[ 0 ].childNodes[ 17 ].innerHTML );
     var RecTmp  = parseInt( elem[ 0 ].childNodes[ 21 ].innerHTML );
     var WavLen  = parseInt( elem[ 0 ].childNodes[ 25 ].innerHTML );
 
     var elem = entry.getElementsByTagName( "MASTER" );
-    // console.log( "MASTER", elem[ 0 ].childNodes );
-
+    // if( memLoc == 1 )
+    //   console.log( "MASTER", elem[ 0 ].childNodes );
     var Tempo     = parseInt( elem[ 0 ].childNodes[ 1 ].innerHTML );
+    var DubMode   = parseInt( elem[ 0 ].childNodes[ 3 ].innerHTML );
     var FadeTime  = parseInt( elem[ 0 ].childNodes[ 9 ].innerHTML );
 
     var elem = entry.getElementsByTagName( "RHYTHM" );
     var Beat = parseInt( elem[ 0 ].childNodes[ 13 ].innerHTML );
 
     tempHtml += "<div class='panel'>\n";
+    tempHtml += "Memory " + memString + "<br><br>\n";
     tempHtml += "Name: <input contenteditable='true' id='sampleName" + 
                 memString + "' maxlength='12' value='" + loopName + "'><br>\n";
     tempHtml += "PlyLvl: <input type='number' id='samplePlyLvl" +
@@ -159,20 +178,50 @@ function generateConfigHTML()
                 memString + "' min='-50' max='50' value='" + Pan + "'><br>\n";
 
     var c = One ? "checked" : "";
-    tempHtml += "One: <input type='checkbox' id='sampleOne" +
-                memString + "' " + c + "><br>\n";
+    tempHtml += "One shot: <input type='checkbox' id='sampleOne" + memString + "' " + c + "><br>\n";
+
+    // Start mode
+    tempHtml += "Start:<select id='sampleStartMode" + memString + "'>";
+    for( i = 0;i < startModes.length;i++ )
+    {
+      tempHtml += "<option value='" + startModes[ i ] + "' ";
+      if( StrtMod == i )
+        tempHtml += "selected='selected'";
+      tempHtml += ">" + startModes[ i ] + "</option>";
+    }
+    tempHtml += "</select><br>\n";
+
+    // Stop mode
+    tempHtml += "Stop:<select id='sampleStopMode" + memString + "'>";
+    for( i = 0;i < stopModes.length;i++ )
+    {
+      tempHtml += "<option value='" + stopModes[ i ] + "' ";
+      if( StpMod == i )
+        tempHtml += "selected='selected'";
+      tempHtml += ">" + stopModes[ i ] + "</option>";
+    }
+    tempHtml += "</select><br>\n";
+
+    // fade time
+    tempHtml += "Fade:<select id='sampleFadeTime" + memString + "'>";
+    for( i = 0;i < fadeTimes.length;i++ )
+    {
+      tempHtml += "<option value='" + fadeTimes[ i ] + "' ";
+      if( FadeTime == i )
+        tempHtml += "selected='selected'";
+      tempHtml += ">" + fadeTimes[ i ] + "</option>";
+    }
+    tempHtml += "</select><br>\n";
+
+
     tempHtml += "MeasLen: <input type='number' id='sampleMeasLen" +
-                memString + "' min='1' max='256' value='" + MeasLen + "'><br>\n";
+                memString + "' min='1' max='4096' value='" + MeasLen + "'><br>\n";
     tempHtml += "Recorded Tempo: <input type='number' id='sampleRecTmp" +
                 memString + "' min='20' max='300' value='" + RecTmp / 10 + "'><br>\n";
-    tempHtml += "WavLen: <input type='number' id='sampleWavLen" +
+    tempHtml += "Samples: <input type='number' id='sampleWavLen" +
                 memString + "' min='512' max='10000000' value='" + WavLen + "'><br>\n";
-
     tempHtml += "Tempo: <input type='number' id='sampleTempo" +
                 memString + "' min='20' max='300' value='" + Tempo / 10 + "'><br>\n";
-    tempHtml += "Fade: <input type='number' id='sampleFadeTime" +
-                memString + "' min='1' max='10' value='" + FadeTime + "'><br>\n";
-
     tempHtml += "<button class='css_menuButton' id='convertToAsync' onclick='convertToAsync(\"" +
                 memString + "\");'>Async</button>";
     tempHtml += "</div>\n";
@@ -192,8 +241,6 @@ function generateConfigHTML()
 
 function accordionClick( elem )
 {
-  // console.log( "accordionClick" );
-
   var wasOpen = elem.classList.contains( "active" );
   var panel = elem.nextElementSibling;
 
@@ -210,7 +257,7 @@ function accordionClick( elem )
   }
 }
 
-// If a sample is asynchronous, find values to make prevent RC5 artifacts.
+// If a sample is asynchronous, find values to prevent RC5 time stretching artifacts.
 function convertToAsync( memString )
 {
   var memIndex = parseInt( memString );
@@ -225,12 +272,14 @@ function convertToAsync( memString )
 
   var bpm = 100; // can pick any bpm for async samples
   var nBeats = parseInt( waveLen * bpm / 2646000 );
-  var nBeats4 = nBeats + 3 - nBeats % 4; // round up to a factor of 4 (4bpm)
+  var mod = nBeats % 4;
+  var nBeats4 = nBeats; // beats rounded up to a factor of 4 (4/4 time)
+  if( mod )
+    nBeats4 += 4 - mod;
 
   var waveLenAdj = nBeats4 * 2646000 / bpm;
 
   var elem = document.getElementById( "sampleMeasLen" + memString );
-
   elem.value = nBeats4 / 4;
   var elem = document.getElementById( "sampleRecTmp" + memString );
   elem.value = 100.0; // 100.0 bpm
@@ -253,6 +302,14 @@ function saveConfig()
 
     var elem = entry.getElementsByTagName( "NAME" );
     var docElem = document.getElementById( "sampleName" + memString );
+    var nameString = docElem.value.toString();
+    nameString += "            "; // make sure it ends in spaces
+
+    for( var ix = 0;ix < 12;ix++ )
+    {
+      var charValue = nameString.charCodeAt( ix );
+      elem[ 0 ].childNodes[ 1 + ix * 2 ].innerHTML = charValue.toString();
+    }
 
     elem = entry.getElementsByTagName( "TRACK1" );
     docElem = document.getElementById( "samplePlyLvl" + memString );
@@ -261,24 +318,29 @@ function saveConfig()
     elem[ 0 ].childNodes[ 5 ].innerHTML = docElem.value.toString();
     docElem = document.getElementById( "sampleOne" + memString );
     elem[ 0 ].childNodes[ 7 ].innerHTML = docElem.value.toString();
+
+    docElem = document.getElementById( "sampleStartMode" + memString );
+    elem[ 0 ].childNodes[ 9 ].innerHTML = getEntryIx( startModes, docElem.value.toString() ).toString();
+    docElem = document.getElementById( "sampleStopMode" + memString );
+    elem[ 0 ].childNodes[ 11 ].innerHTML = getEntryIx( stopModes, docElem.value.toString() ).toString();
+
     docElem = document.getElementById( "sampleMeasLen" + memString );
     elem[ 0 ].childNodes[ 17 ].innerHTML = docElem.value.toString();
+    
     docElem = document.getElementById( "sampleRecTmp" + memString );
-    elem[ 0 ].childNodes[ 21 ].innerHTML = docElem.value.toString();
+    elem[ 0 ].childNodes[ 21 ].innerHTML = ( docElem.value * 10 ).toString();
     docElem = document.getElementById( "sampleWavLen" + memString );
     elem[ 0 ].childNodes[ 25 ].innerHTML = docElem.value.toString();
 
     elem = entry.getElementsByTagName( "MASTER" );
     docElem = document.getElementById( "sampleTempo" + memString );
-    elem[ 0 ].childNodes[ 1 ].innerHTML = docElem.value.toString();
+    elem[ 0 ].childNodes[ 1 ].innerHTML = ( docElem.value * 10 ).toString();
     docElem = document.getElementById( "sampleFadeTime" + memString );
-    elem[ 0 ].childNodes[ 9 ].innerHTML = docElem.value.toString();
+    elem[ 0 ].childNodes[ 9 ].innerHTML = getEntryIx( fadeTimes, docElem.value.toString() ).toString();
 
     elem = entry.getElementsByTagName( "RHYTHM" );
     elem[ 0 ].childNodes[ 13 ].innerHTML = "2"; // 4/4
   }
-
-  console.log( rc5_XML );
 
   // save the XLM file
   const a = document.createElement( 'a' );
