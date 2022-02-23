@@ -76,11 +76,8 @@ function openConfigFile( e )
   var file = e.target.files[ 0 ];
   if( !file )
     return;
-  // if( file.name != "MEMORY1.RC0" )
-  // {
-  //   alert( "File name must be MEMORY1.RC0" );
-  //   return;
-  // }
+  if( ( file.name != "MEMORY1.RC0" ) && ( file.name != "MEMORY2.RC0" ) )
+    alert( "File should be MEMORY1.RC0" );
 
   var reader = new FileReader();
   reader.onload = function( e )
@@ -170,15 +167,17 @@ function generateConfigHTML()
 
     tempHtml += "<div class='panel'>\n";
     tempHtml += "Memory " + memString + "<br><br>\n";
-    tempHtml += "Name: <input contenteditable='true' id='sampleName" + 
-                memString + "' maxlength='12' value='" + loopName + "'><br>\n";
+    tempHtml += "NameT: <input contenteditable='true' id='sampleNameT" + 
+                memString + "' maxlength='6' value='" + loopName.substring( 0, 6 ) + "'><br>\n";
+    tempHtml += "NameB: <input contenteditable='true' id='sampleNameB" + 
+                memString + "' maxlength='6' value='" + loopName.substring( 6, 12 ) + "'><br>\n";
     tempHtml += "PlyLvl: <input type='number' id='samplePlyLvl" +
                 memString + "' min='0' max='200' value='" + PlyLvl + "'><br>\n";
     tempHtml += "Pan: <input type='number' id='samplePan" +
                 memString + "' min='-50' max='50' value='" + Pan + "'><br>\n";
 
     var c = One ? "checked" : "";
-    tempHtml += "One shot: <input type='checkbox' id='sampleOne" + memString + "' " + c + "><br>\n";
+    tempHtml += "One Shot: <input type='checkbox' id='sampleOne" + memString + "' " + c + "><br>\n";
 
     // Start mode
     tempHtml += "Start:<select id='sampleStartMode" + memString + "'>";
@@ -214,7 +213,7 @@ function generateConfigHTML()
     tempHtml += "</select><br>\n";
 
 
-    tempHtml += "MeasLen: <input type='number' id='sampleMeasLen" +
+    tempHtml += "Measures: <input type='number' id='sampleMeasLen" +
                 memString + "' min='1' max='4096' value='" + MeasLen + "'><br>\n";
     tempHtml += "Recorded Tempo: <input type='number' id='sampleRecTmp" +
                 memString + "' min='20' max='300' value='" + RecTmp / 10 + "'><br>\n";
@@ -301,9 +300,10 @@ function saveConfig()
     var entry = memEntries[ memLoc - 1 ]; // entries are 0 based.
 
     var elem = entry.getElementsByTagName( "NAME" );
-    var docElem = document.getElementById( "sampleName" + memString );
-    var nameString = docElem.value.toString();
-    nameString += "            "; // make sure it ends in spaces
+    var docElem = document.getElementById( "sampleNameT" + memString );
+    var nameString = ( docElem.value.toString() + "      " ).substring( 0, 6 );
+    var docElem = document.getElementById( "sampleNameB" + memString );
+    nameString += docElem.value.toString() + "      "; // pad with spaces.
 
     for( var ix = 0;ix < 12;ix++ )
     {
@@ -317,7 +317,7 @@ function saveConfig()
     docElem = document.getElementById( "samplePan" + memString );
     elem[ 0 ].childNodes[ 5 ].innerHTML = docElem.value.toString();
     docElem = document.getElementById( "sampleOne" + memString );
-    elem[ 0 ].childNodes[ 7 ].innerHTML = docElem.value.toString();
+    elem[ 0 ].childNodes[ 7 ].innerHTML = ( docElem.value.toString() == "on" ) ? "1" : "0";
 
     docElem = document.getElementById( "sampleStartMode" + memString );
     elem[ 0 ].childNodes[ 9 ].innerHTML = getEntryIx( startModes, docElem.value.toString() ).toString();
@@ -355,7 +355,6 @@ function saveConfig()
   a.click();
 	URL.revokeObjectURL( a.href );
 }
-
 
 </script>
 </body>

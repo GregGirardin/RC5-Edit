@@ -1,19 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<database name="RC-5" revision="0">
+<?xml version="1.0" encoding="utf-8"?><database name="RC-5" revision="0">
 <mem id="0">
 <NAME>
 	<C01>68</C01>
-	<C02>79</C02>
-	<C03>78</C03>
-	<C04>84</C04>
-	<C05>32</C05>
-	<C06>83</C06>
-	<C07>32</C07>
-	<C08>32</C08>
-	<C09>32</C09>
-	<C10>32</C10>
-	<C11>32</C11>
-	<C12>32</C12>
+	<C02>111</C02>
+	<C03>110</C03>
+	<C04>116</C04>
+	<C05>83</C05>
+	<C06>116</C06>
+	<C07>111</C07>
+	<C08>112</C08>
+	<C09>NaN</C09>
+	<C10>NaN</C10>
+	<C11>NaN</C11>
+	<C12>NaN</C12>
 </NAME>
 <TRACK1>
 	<Rev>0</Rev>
@@ -24,14 +23,14 @@
 	<StpMod>1</StpMod>
 	<Measure>39</Measure>
 	<MeasMod>1</MeasMod>
-	<MeasLen>32</MeasLen>
+	<MeasLen>28</MeasLen>
 	<MeasBtLp>0</MeasBtLp>
-	<RecTmp>1164</RecTmp>
+	<RecTmp>1000</RecTmp>
 	<WavStat>1</WavStat>
-	<WavLen>2908307</WavLen>
+	<WavLen>2963520</WavLen>
 </TRACK1>
 <MASTER>
-	<Tempo>1164</Tempo>
+	<Tempo>1000</Tempo>
 	<DubMode>0</DubMode>
 	<RecAction>1</RecAction>
 	<AutoRec>0</AutoRec>
@@ -72,12 +71,12 @@
 	<C04>103</C04>
 	<C05>114</C05>
 	<C06>121</C06>
-	<C07>32</C07>
-	<C08>32</C08>
-	<C09>32</C09>
-	<C10>32</C10>
+	<C07>76</C07>
+	<C08>105</C08>
+	<C09>107</C09>
+	<C10>101</C10>
 	<C11>32</C11>
-	<C12>32</C12>
+	<C12>NaN</C12>
 </NAME>
 <TRACK1>
 	<Rev>0</Rev>
@@ -90,12 +89,12 @@
 	<MeasMod>1</MeasMod>
 	<MeasLen>16</MeasLen>
 	<MeasBtLp>0</MeasBtLp>
-	<RecTmp>1033</RecTmp>
+	<RecTmp>1000</RecTmp>
 	<WavStat>1</WavStat>
-	<WavLen>1637866</WavLen>
+	<WavLen>1693440</WavLen>
 </TRACK1>
 <MASTER>
-	<Tempo>1280</Tempo>
+	<Tempo>1000</Tempo>
 	<DubMode>0</DubMode>
 	<RecAction>1</RecAction>
 	<AutoRec>0</AutoRec>
@@ -133,15 +132,15 @@
 	<C01>83</C01>
 	<C02>101</C02>
 	<C03>112</C03>
-	<C04>32</C04>
-	<C05>87</C05>
-	<C06>97</C06>
-	<C07>121</C07>
-	<C08>32</C08>
-	<C09>32</C09>
-	<C10>32</C10>
-	<C11>32</C11>
-	<C12>32</C12>
+	<C04>97</C04>
+	<C05>114</C05>
+	<C06>87</C06>
+	<C07>97</C07>
+	<C08>121</C08>
+	<C09>115</C09>
+	<C10>NaN</C10>
+	<C11>NaN</C11>
+	<C12>NaN</C12>
 </NAME>
 <TRACK1>
 	<Rev>0</Rev>
@@ -152,14 +151,14 @@
 	<StpMod>1</StpMod>
 	<Measure>15</Measure>
 	<MeasMod>1</MeasMod>
-	<MeasLen>8</MeasLen>
+	<MeasLen>9</MeasLen>
 	<MeasBtLp>0</MeasBtLp>
-	<RecTmp>883</RecTmp>
+	<RecTmp>1000</RecTmp>
 	<WavStat>1</WavStat>
-	<WavLen>958846</WavLen>
+	<WavLen>952560</WavLen>
 </TRACK1>
 <MASTER>
-	<Tempo>883</Tempo>
+	<Tempo>1000</Tempo>
 	<DubMode>0</DubMode>
 	<RecAction>1</RecAction>
 	<AutoRec>0</AutoRec>
@@ -200,12 +199,12 @@
 	<C04>114</C04>
 	<C05>32</C05>
 	<C06>32</C06>
-	<C07>32</C07>
-	<C08>32</C08>
-	<C09>32</C09>
-	<C10>32</C10>
-	<C11>32</C11>
-	<C12>32</C12>
+	<C07>83</C07>
+	<C08>117</C08>
+	<C09>103</C09>
+	<C10>97</C10>
+	<C11>114</C11>
+	<C12>NaN</C12>
 </NAME>
 <TRACK1>
 	<Rev>0</Rev>
@@ -259,17 +258,17 @@
 <mem id="4">
 <NAME>
 	<C01>76</C01>
-	<C02>79</C02>
-	<C03>80</C03>
-	<C04>32</C04>
-	<C05>32</C05>
-	<C06>32</C06>
-	<C07>32</C07>
-	<C08>32</C08>
-	<C09>32</C09>
-	<C10>32</C10>
-	<C11>32</C11>
-	<C12>32</C12>
+	<C02>105</C02>
+	<C03>118</C03>
+	<C04>105</C04>
+	<C05>110</C05>
+	<C06>80</C06>
+	<C07>114</C07>
+	<C08>97</C08>
+	<C09>121</C09>
+	<C10>101</C10>
+	<C11>114</C11>
+	<C12>NaN</C12>
 </NAME>
 <TRACK1>
 	<Rev>0</Rev>
@@ -322,18 +321,18 @@
 </mem>
 <mem id="5">
 <NAME>
-	<C01>68</C01>
-	<C02>114</C02>
-	<C03>97</C03>
-	<C04>103</C04>
+	<C01>32</C01>
+	<C02>32</C02>
+	<C03>32</C03>
+	<C04>32</C04>
 	<C05>32</C05>
 	<C06>32</C06>
-	<C07>32</C07>
-	<C08>32</C08>
-	<C09>32</C09>
-	<C10>32</C10>
-	<C11>32</C11>
-	<C12>32</C12>
+	<C07>NaN</C07>
+	<C08>NaN</C08>
+	<C09>NaN</C09>
+	<C10>NaN</C10>
+	<C11>NaN</C11>
+	<C12>NaN</C12>
 </NAME>
 <TRACK1>
 	<Rev>0</Rev>
@@ -728,14 +727,14 @@
 	<StpMod>1</StpMod>
 	<Measure>15</Measure>
 	<MeasMod>1</MeasMod>
-	<MeasLen>8</MeasLen>
+	<MeasLen>5</MeasLen>
 	<MeasBtLp>0</MeasBtLp>
-	<RecTmp>1553</RecTmp>
+	<RecTmp>1000</RecTmp>
 	<WavStat>1</WavStat>
-	<WavLen>545155</WavLen>
+	<WavLen>529200</WavLen>
 </TRACK1>
 <MASTER>
-	<Tempo>1200</Tempo>
+	<Tempo>1000</Tempo>
 	<DubMode>0</DubMode>
 	<RecAction>1</RecAction>
 	<AutoRec>0</AutoRec>
@@ -792,14 +791,14 @@
 	<StpMod>1</StpMod>
 	<Measure>11</Measure>
 	<MeasMod>1</MeasMod>
-	<MeasLen>4</MeasLen>
+	<MeasLen>5</MeasLen>
 	<MeasBtLp>0</MeasBtLp>
-	<RecTmp>842</RecTmp>
+	<RecTmp>1000</RecTmp>
 	<WavStat>1</WavStat>
-	<WavLen>502278</WavLen>
+	<WavLen>529200</WavLen>
 </TRACK1>
 <MASTER>
-	<Tempo>900</Tempo>
+	<Tempo>1000</Tempo>
 	<DubMode>0</DubMode>
 	<RecAction>1</RecAction>
 	<AutoRec>0</AutoRec>
@@ -1224,12 +1223,12 @@
 	<C04>116</C04>
 	<C05>111</C05>
 	<C06>107</C06>
-	<C07>32</C07>
-	<C08>32</C08>
-	<C09>32</C09>
-	<C10>32</C10>
-	<C11>32</C11>
-	<C12>32</C12>
+	<C07>80</C07>
+	<C08>111</C08>
+	<C09>105</C09>
+	<C10>110</C10>
+	<C11>116</C11>
+	<C12>NaN</C12>
 </NAME>
 <TRACK1>
 	<Rev>0</Rev>
@@ -1240,14 +1239,14 @@
 	<StpMod>1</StpMod>
 	<Measure>39</Measure>
 	<MeasMod>1</MeasMod>
-	<MeasLen>32</MeasLen>
+	<MeasLen>21</MeasLen>
 	<MeasBtLp>0</MeasBtLp>
-	<RecTmp>1543</RecTmp>
+	<RecTmp>1000</RecTmp>
 	<WavStat>1</WavStat>
-	<WavLen>2193924</WavLen>
+	<WavLen>2222640</WavLen>
 </TRACK1>
 <MASTER>
-	<Tempo>1610</Tempo>
+	<Tempo>1000</Tempo>
 	<DubMode>0</DubMode>
 	<RecAction>1</RecAction>
 	<AutoRec>0</AutoRec>
@@ -1304,11 +1303,11 @@
 	<StpMod>1</StpMod>
 	<Measure>23</Measure>
 	<MeasMod>1</MeasMod>
-	<MeasLen>16</MeasLen>
+	<MeasLen>17</MeasLen>
 	<MeasBtLp>0</MeasBtLp>
-	<RecTmp>963</RecTmp>
+	<RecTmp>1000</RecTmp>
 	<WavStat>1</WavStat>
-	<WavLen>1757346</WavLen>
+	<WavLen>1799280</WavLen>
 </TRACK1>
 <MASTER>
 	<Tempo>1000</Tempo>
@@ -1352,12 +1351,12 @@
 	<C04>32</C04>
 	<C05>32</C05>
 	<C06>32</C06>
-	<C07>32</C07>
-	<C08>32</C08>
-	<C09>32</C09>
-	<C10>32</C10>
-	<C11>32</C11>
-	<C12>32</C12>
+	<C07>80</C07>
+	<C08>101</C08>
+	<C09>111</C09>
+	<C10>112</C10>
+	<C11>108</C11>
+	<C12>101</C12>
 </NAME>
 <TRACK1>
 	<Rev>0</Rev>
@@ -1368,14 +1367,14 @@
 	<StpMod>0</StpMod>
 	<Measure>15</Measure>
 	<MeasMod>1</MeasMod>
-	<MeasLen>8</MeasLen>
+	<MeasLen>10</MeasLen>
 	<MeasBtLp>0</MeasBtLp>
-	<RecTmp>825</RecTmp>
+	<RecTmp>1000</RecTmp>
 	<WavStat>1</WavStat>
-	<WavLen>1025482</WavLen>
+	<WavLen>1058400</WavLen>
 </TRACK1>
 <MASTER>
-	<Tempo>900</Tempo>
+	<Tempo>1000</Tempo>
 	<DubMode>0</DubMode>
 	<RecAction>1</RecAction>
 	<AutoRec>0</AutoRec>
@@ -1432,14 +1431,14 @@
 	<StpMod>1</StpMod>
 	<Measure>23</Measure>
 	<MeasMod>1</MeasMod>
-	<MeasLen>16</MeasLen>
+	<MeasLen>13</MeasLen>
 	<MeasBtLp>0</MeasBtLp>
-	<RecTmp>1306</RecTmp>
+	<RecTmp>1000</RecTmp>
 	<WavStat>1</WavStat>
-	<WavLen>1296581</WavLen>
+	<WavLen>1375920</WavLen>
 </TRACK1>
 <MASTER>
-	<Tempo>1200</Tempo>
+	<Tempo>1000</Tempo>
 	<DubMode>0</DubMode>
 	<RecAction>1</RecAction>
 	<AutoRec>0</AutoRec>
@@ -1496,14 +1495,14 @@
 	<StpMod>1</StpMod>
 	<Measure>23</Measure>
 	<MeasMod>1</MeasMod>
-	<MeasLen>16</MeasLen>
+	<MeasLen>11</MeasLen>
 	<MeasBtLp>0</MeasBtLp>
-	<RecTmp>1544</RecTmp>
+	<RecTmp>1000</RecTmp>
 	<WavStat>1</WavStat>
-	<WavLen>1096617</WavLen>
+	<WavLen>1164240</WavLen>
 </TRACK1>
 <MASTER>
-	<Tempo>1200</Tempo>
+	<Tempo>1000</Tempo>
 	<DubMode>0</DubMode>
 	<RecAction>1</RecAction>
 	<AutoRec>0</AutoRec>
@@ -1538,18 +1537,18 @@
 </mem>
 <mem id="24">
 <NAME>
-	<C01>80</C01>
-	<C02>114</C02>
-	<C03>111</C03>
-	<C04>112</C04>
-	<C05>32</C05>
-	<C06>32</C06>
-	<C07>32</C07>
-	<C08>32</C08>
-	<C09>32</C09>
-	<C10>32</C10>
-	<C11>32</C11>
-	<C12>32</C12>
+	<C01>84</C01>
+	<C02>104</C02>
+	<C03>101</C03>
+	<C04>80</C04>
+	<C05>114</C05>
+	<C06>111</C06>
+	<C07>112</C07>
+	<C08>111</C08>
+	<C09>115</C09>
+	<C10>NaN</C10>
+	<C11>NaN</C11>
+	<C12>NaN</C12>
 </NAME>
 <TRACK1>
 	<Rev>0</Rev>
@@ -1670,14 +1669,14 @@
 	<C02>111</C02>
 	<C03>100</C03>
 	<C04>70</C04>
-	<C05>32</C05>
-	<C06>32</C06>
-	<C07>32</C07>
-	<C08>32</C08>
-	<C09>32</C09>
-	<C10>32</C10>
-	<C11>32</C11>
-	<C12>32</C12>
+	<C05>97</C05>
+	<C06>116</C06>
+	<C07>104</C07>
+	<C08>101</C08>
+	<C09>114</C09>
+	<C10>NaN</C10>
+	<C11>NaN</C11>
+	<C12>NaN</C12>
 </NAME>
 <TRACK1>
 	<Rev>0</Rev>
@@ -1688,14 +1687,14 @@
 	<StpMod>0</StpMod>
 	<Measure>11</Measure>
 	<MeasMod>1</MeasMod>
-	<MeasLen>4</MeasLen>
+	<MeasLen>5</MeasLen>
 	<MeasBtLp>0</MeasBtLp>
-	<RecTmp>876</RecTmp>
+	<RecTmp>1000</RecTmp>
 	<WavStat>1</WavStat>
-	<WavLen>482952</WavLen>
+	<WavLen>529200</WavLen>
 </TRACK1>
 <MASTER>
-	<Tempo>986</Tempo>
+	<Tempo>1000</Tempo>
 	<DubMode>0</DubMode>
 	<RecAction>1</RecAction>
 	<AutoRec>0</AutoRec>
@@ -1734,14 +1733,14 @@
 	<C02>97</C02>
 	<C03>105</C03>
 	<C04>110</C04>
-	<C05>83</C05>
-	<C06>32</C06>
-	<C07>32</C07>
-	<C08>32</C08>
-	<C09>32</C09>
-	<C10>32</C10>
-	<C11>32</C11>
-	<C12>32</C12>
+	<C05>115</C05>
+	<C06>116</C06>
+	<C07>105</C07>
+	<C08>99</C08>
+	<C09>107</C09>
+	<C10>NaN</C10>
+	<C11>NaN</C11>
+	<C12>NaN</C12>
 </NAME>
 <TRACK1>
 	<Rev>0</Rev>
@@ -1752,14 +1751,14 @@
 	<StpMod>1</StpMod>
 	<Measure>15</Measure>
 	<MeasMod>1</MeasMod>
-	<MeasLen>8</MeasLen>
+	<MeasLen>7</MeasLen>
 	<MeasBtLp>0</MeasBtLp>
-	<RecTmp>1129</RecTmp>
+	<RecTmp>1000</RecTmp>
 	<WavStat>1</WavStat>
-	<WavLen>749636</WavLen>
+	<WavLen>740880</WavLen>
 </TRACK1>
 <MASTER>
-	<Tempo>1200</Tempo>
+	<Tempo>1000</Tempo>
 	<DubMode>0</DubMode>
 	<RecAction>1</RecAction>
 	<AutoRec>0</AutoRec>
@@ -1800,12 +1799,12 @@
 	<C04>32</C04>
 	<C05>32</C05>
 	<C06>32</C06>
-	<C07>32</C07>
-	<C08>32</C08>
-	<C09>32</C09>
-	<C10>32</C10>
-	<C11>32</C11>
-	<C12>32</C12>
+	<C07>NaN</C07>
+	<C08>NaN</C08>
+	<C09>NaN</C09>
+	<C10>NaN</C10>
+	<C11>NaN</C11>
+	<C12>NaN</C12>
 </NAME>
 <TRACK1>
 	<Rev>0</Rev>
@@ -1864,12 +1863,12 @@
 	<C04>103</C04>
 	<C05>117</C05>
 	<C06>108</C06>
-	<C07>97</C07>
-	<C08>32</C08>
-	<C09>32</C09>
-	<C10>32</C10>
-	<C11>32</C11>
-	<C12>32</C12>
+	<C07>NaN</C07>
+	<C08>NaN</C08>
+	<C09>NaN</C09>
+	<C10>NaN</C10>
+	<C11>NaN</C11>
+	<C12>NaN</C12>
 </NAME>
 <TRACK1>
 	<Rev>0</Rev>
@@ -1925,15 +1924,15 @@
 	<C01>68</C01>
 	<C02>115</C02>
 	<C03>116</C03>
-	<C04>32</C04>
-	<C05>83</C05>
-	<C06>121</C06>
-	<C07>110</C07>
-	<C08>32</C08>
-	<C09>67</C09>
-	<C10>32</C10>
-	<C11>32</C11>
-	<C12>32</C12>
+	<C04>83</C04>
+	<C05>121</C05>
+	<C06>110</C06>
+	<C07>67</C07>
+	<C08>NaN</C08>
+	<C09>NaN</C09>
+	<C10>NaN</C10>
+	<C11>NaN</C11>
+	<C12>NaN</C12>
 </NAME>
 <TRACK1>
 	<Rev>0</Rev>
@@ -1946,12 +1945,12 @@
 	<MeasMod>1</MeasMod>
 	<MeasLen>0</MeasLen>
 	<MeasBtLp>0</MeasBtLp>
-	<RecTmp>1200</RecTmp>
+	<RecTmp>1000</RecTmp>
 	<WavStat>0</WavStat>
 	<WavLen>0</WavLen>
 </TRACK1>
 <MASTER>
-	<Tempo>1200</Tempo>
+	<Tempo>1000</Tempo>
 	<DubMode>0</DubMode>
 	<RecAction>1</RecAction>
 	<AutoRec>0</AutoRec>
@@ -1991,13 +1990,13 @@
 	<C03>110</C03>
 	<C04>66</C04>
 	<C05>98</C05>
-	<C06>32</C06>
-	<C07>32</C07>
-	<C08>32</C08>
-	<C09>32</C09>
-	<C10>32</C10>
-	<C11>32</C11>
-	<C12>32</C12>
+	<C06>NaN</C06>
+	<C07>NaN</C07>
+	<C08>NaN</C08>
+	<C09>NaN</C09>
+	<C10>NaN</C10>
+	<C11>NaN</C11>
+	<C12>NaN</C12>
 </NAME>
 <TRACK1>
 	<Rev>0</Rev>
@@ -2010,12 +2009,12 @@
 	<MeasMod>1</MeasMod>
 	<MeasLen>0</MeasLen>
 	<MeasBtLp>0</MeasBtLp>
-	<RecTmp>1200</RecTmp>
+	<RecTmp>1000</RecTmp>
 	<WavStat>0</WavStat>
 	<WavLen>0</WavLen>
 </TRACK1>
 <MASTER>
-	<Tempo>1200</Tempo>
+	<Tempo>1000</Tempo>
 	<DubMode>0</DubMode>
 	<RecAction>1</RecAction>
 	<AutoRec>0</AutoRec>
