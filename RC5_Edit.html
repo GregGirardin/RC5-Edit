@@ -144,8 +144,7 @@ function generateConfigHTML()
       loopName += String.fromCharCode( parseInt( elem[ 0 ].childNodes[ 1 + ix * 2 ].innerHTML ) );
 
     var elem = entry.getElementsByTagName( "TRACK1" );
-    // if( memLoc == 1 )
-    //  console.log( "TRACK1", elem[ 0 ].childNodes );
+
     var PlyLvl  = parseInt( elem[ 0 ].childNodes[  3 ].innerHTML );
     var Pan     = parseInt( elem[ 0 ].childNodes[  5 ].innerHTML );
     var One     = parseInt( elem[ 0 ].childNodes[  7 ].innerHTML );
@@ -156,8 +155,7 @@ function generateConfigHTML()
     var WavLen  = parseInt( elem[ 0 ].childNodes[ 25 ].innerHTML );
 
     var elem = entry.getElementsByTagName( "MASTER" );
-    // if( memLoc == 1 )
-    //   console.log( "MASTER", elem[ 0 ].childNodes );
+
     var Tempo     = parseInt( elem[ 0 ].childNodes[ 1 ].innerHTML );
     var DubMode   = parseInt( elem[ 0 ].childNodes[ 3 ].innerHTML );
     var FadeTime  = parseInt( elem[ 0 ].childNodes[ 9 ].innerHTML );
@@ -168,13 +166,13 @@ function generateConfigHTML()
     tempHtml += "<div class='panel'>\n";
     tempHtml += "Memory " + memString + "<br><br>\n";
     tempHtml += "NameT: <input contenteditable='true' id='sampleNameT" + 
-                memString + "' maxlength='6' value='" + loopName.substring( 0, 6 ) + "'><br>\n";
+                memString + "' size='6' maxlength='6' value='" + loopName.substring( 0, 6 ) + "'><br>\n";
     tempHtml += "NameB: <input contenteditable='true' id='sampleNameB" + 
-                memString + "' maxlength='6' value='" + loopName.substring( 6, 12 ) + "'><br>\n";
+                memString + "' size='6' maxlength='6' value='" + loopName.substring( 6, 12 ) + "'><br>\n";
     tempHtml += "PlyLvl: <input type='number' id='samplePlyLvl" +
-                memString + "' min='0' max='200' value='" + PlyLvl + "'><br>\n";
+                memString + "' size='3' min='0' max='200' value='" + PlyLvl + "'><br>\n";
     tempHtml += "Pan: <input type='number' id='samplePan" +
-                memString + "' min='-50' max='50' value='" + Pan + "'><br>\n";
+                memString + "' min='0' max='100' value='" + Pan + "'><br>\n";
 
     var c = One ? "checked" : "";
     tempHtml += "One Shot: <input type='checkbox' id='sampleOne" + memString + "' " + c + "><br>\n";
@@ -212,15 +210,14 @@ function generateConfigHTML()
     }
     tempHtml += "</select><br>\n";
 
-
     tempHtml += "Measures: <input type='number' id='sampleMeasLen" +
-                memString + "' min='1' max='4096' value='" + MeasLen + "'><br>\n";
+                memString + "' size='4' min='1' max='4096' value='" + MeasLen + "'><br>\n";
     tempHtml += "Recorded Tempo: <input type='number' id='sampleRecTmp" +
-                memString + "' min='20' max='300' value='" + RecTmp / 10 + "'><br>\n";
+                memString + "' min='20.0' max='300.0' value='" + RecTmp / 10 + "'><br>\n";
     tempHtml += "Samples: <input type='number' id='sampleWavLen" +
                 memString + "' min='512' max='10000000' value='" + WavLen + "'><br>\n";
     tempHtml += "Tempo: <input type='number' id='sampleTempo" +
-                memString + "' min='20' max='300' value='" + Tempo / 10 + "'><br>\n";
+                memString + "' min='20.0' max='300.0' value='" + Tempo / 10 + "'><br>\n";
     tempHtml += "<button class='css_menuButton' id='convertToAsync' onclick='convertToAsync(\"" +
                 memString + "\");'>Async</button>";
     tempHtml += "</div>\n";
