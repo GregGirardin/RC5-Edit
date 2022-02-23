@@ -51,6 +51,11 @@ var configEditedFlag = false;
 var rc5_XML;
 var memEntries;
 
+var startModes = [ "Immediate", "Fade In" ];
+var stopModes = [ "Immediate", "Fade Out", "Loop End" ];
+var dubModes = [ "Overdub", "Replace" ];
+var fadeTimes = [ "1/16", "1/8", "1/4", "1/2", "1M", "2M", "4M" ];
+
 //////////////////////////// //////////////////////////// ////////////////////////////
 //////////////////////////// //////////////////////////// ////////////////////////////
 window.onload = rc5EditInit;
@@ -94,11 +99,7 @@ function openConfigFile( e )
   reader.readAsText( file );
 }
 
-var startModes = [ "Immediate", "FadeIn" ];
-var stopModes = [ "Immediate", "FadeOut", "LoopEnd" ];
-var dubModes = [ "Overdub", "Replace" ];
-var fadeTimes = [ "1/16", "1/8", "1/4", "1/2", "1M", "2M", "4M" ];
-
+// given an array of strings, find the index in the array that matches 'entry'
 function getEntryIx( array, entry )
 {
   for( var ix = 0;ix < array.length;ix++ )
@@ -113,7 +114,7 @@ function generateConfigHTML()
   var accords;
   var tempHtml = "";
 
-  for( var memLoc = 0;memLoc <= memEntries.length;memLoc++ ) // valid memLoc < 1 - 99 > 
+  for( var memLoc = 0;memLoc <= memEntries.length;memLoc++ ) // valid memLoc <1 - 99> 
   {
     var memString;
 
@@ -144,7 +145,6 @@ function generateConfigHTML()
       loopName += String.fromCharCode( parseInt( elem[ 0 ].childNodes[ 1 + ix * 2 ].innerHTML ) );
 
     var elem = entry.getElementsByTagName( "TRACK1" );
-
     var PlyLvl  = parseInt( elem[ 0 ].childNodes[  3 ].innerHTML );
     var Pan     = parseInt( elem[ 0 ].childNodes[  5 ].innerHTML );
     var One     = parseInt( elem[ 0 ].childNodes[  7 ].innerHTML );
@@ -155,7 +155,6 @@ function generateConfigHTML()
     var WavLen  = parseInt( elem[ 0 ].childNodes[ 25 ].innerHTML );
 
     var elem = entry.getElementsByTagName( "MASTER" );
-
     var Tempo     = parseInt( elem[ 0 ].childNodes[ 1 ].innerHTML );
     var DubMode   = parseInt( elem[ 0 ].childNodes[ 3 ].innerHTML );
     var FadeTime  = parseInt( elem[ 0 ].childNodes[ 9 ].innerHTML );
@@ -275,13 +274,13 @@ function convertToAsync( memString )
 
   var waveLenAdj = nBeats4 * 2646000 / bpm;
 
-  var elem = document.getElementById( "sampleMeasLen" + memString );
+  elem = document.getElementById( "sampleMeasLen" + memString );
   elem.value = nBeats4 / 4;
-  var elem = document.getElementById( "sampleRecTmp" + memString );
+  elem = document.getElementById( "sampleRecTmp" + memString );
   elem.value = 100.0; // 100.0 bpm
-  var elem = document.getElementById( "sampleTempo" + memString );
+  elem = document.getElementById( "sampleTempo" + memString );
   elem.value = 100.0;
-  var elem = document.getElementById( "sampleWavLen" + memString );
+  elem = document.getElementById( "sampleWavLen" + memString );
   elem.value = waveLenAdj;
 }
 
