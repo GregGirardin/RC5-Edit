@@ -54,7 +54,7 @@ var memEntries;
 var startModes = [ "Immediate", "Fade In" ];
 var stopModes = [ "Immediate", "Fade Out", "Loop End" ];
 var dubModes = [ "Overdub", "Replace" ];
-var fadeTimes = [ "1/16", "1/8", "1/4", "1/2", "1M", "2M", "4M" ];
+var fadeTimes = [ "1/16", "1/8", "1/4", "1/2", "1M", "2M", "3M", "4M" ];
 
 //////////////////////////// //////////////////////////// ////////////////////////////
 //////////////////////////// //////////////////////////// ////////////////////////////
@@ -217,8 +217,8 @@ function generateConfigHTML()
                 memString + "' min='512' max='10000000' value='" + WavLen + "'><br>\n";
     tempHtml += "Tempo: <input type='number' id='sampleTempo" +
                 memString + "' min='20.0' max='300.0' value='" + Tempo / 10 + "'><br>\n";
-    tempHtml += "<button class='css_menuButton' id='convertToAsync' onclick='convertToAsync(\"" +
-                memString + "\");'>Async</button>";
+    tempHtml += "<button class='css_menuButton' onclick='convertToAsync(\"" +
+                memString + "\", 0 );'>Async</button>";
     tempHtml += "</div>\n";
   }
 
@@ -265,7 +265,9 @@ function convertToAsync( memString )
   var elem = entry.getElementsByTagName( "TRACK1" );
   var waveLen = parseInt( elem[ 0 ].childNodes[ 25 ].innerHTML );
 
-  var bpm = 100; // can pick any bpm for async samples
+  docElem = document.getElementById( "sampleTempo" + memString );
+  var bpm = docElem.value;
+
   var nBeats = parseInt( waveLen * bpm / 2646000 );
   var mod = nBeats % 4;
   var nBeats4 = nBeats; // beats rounded up to a factor of 4 (4/4 time)
@@ -277,9 +279,9 @@ function convertToAsync( memString )
   elem = document.getElementById( "sampleMeasLen" + memString );
   elem.value = nBeats4 / 4;
   elem = document.getElementById( "sampleRecTmp" + memString );
-  elem.value = 100.0; // 100.0 bpm
+  elem.value = bpm;
   elem = document.getElementById( "sampleTempo" + memString );
-  elem.value = 100.0;
+  elem.value = bpm;
   elem = document.getElementById( "sampleWavLen" + memString );
   elem.value = waveLenAdj;
 }
