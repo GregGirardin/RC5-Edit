@@ -274,7 +274,7 @@ function convertToAsync( memString )
   if( mod )
     nBeats4 += 4 - mod;
 
-  var waveLenAdj = nBeats4 * 2646000 / bpm;
+  var waveLenAdj = parseInt( nBeats4 * 2646000 / bpm );
 
   elem = document.getElementById( "sampleMeasLen" + memString );
   elem.value = nBeats4 / 4;
@@ -284,6 +284,26 @@ function convertToAsync( memString )
   elem.value = bpm;
   elem = document.getElementById( "sampleWavLen" + memString );
   elem.value = waveLenAdj;
+}
+
+// Given an DOM element that has in int value, 
+// constrain the value
+// update the DOM element
+// return a string of its value.
+function constrainValue( elemId, min, max, factor=1 )
+{
+  var value = document.getElementById( elemId ).value;
+
+  if( value < min )
+    value = min;
+  else if( value > max )
+    value = max;
+
+  document.getElementById( elemId ).value = value;
+
+  value *= factor; // Provide for tempo which is stored in tenths.
+  value = parseInt( value );  
+  return value.toString();
 }
 
 function saveConfig()
@@ -310,10 +330,8 @@ function saveConfig()
     }
 
     elem = entry.getElementsByTagName( "TRACK1" );
-    docElem = document.getElementById( "samplePlyLvl" + memString );
-    elem[ 0 ].childNodes[ 3 ].innerHTML = docElem.value.toString();
-    docElem = document.getElementById( "samplePan" + memString );
-    elem[ 0 ].childNodes[ 5 ].innerHTML = docElem.value.toString();
+    elem[ 0 ].childNodes[ 3 ].innerHTML = constrainValue( "samplePlyLvl" + memString, 0, 200 );
+    elem[ 0 ].childNodes[ 5 ].innerHTML = constrainValue( "samplePan" + memString, 0, 100 );
     docElem = document.getElementById( "sampleOne" + memString );
     elem[ 0 ].childNodes[ 7 ].innerHTML = ( docElem.value.toString() == "on" ) ? "1" : "0";
 
@@ -322,17 +340,14 @@ function saveConfig()
     docElem = document.getElementById( "sampleStopMode" + memString );
     elem[ 0 ].childNodes[ 11 ].innerHTML = getEntryIx( stopModes, docElem.value.toString() ).toString();
 
-    docElem = document.getElementById( "sampleMeasLen" + memString );
-    elem[ 0 ].childNodes[ 17 ].innerHTML = docElem.value.toString();
-    
-    docElem = document.getElementById( "sampleRecTmp" + memString );
-    elem[ 0 ].childNodes[ 21 ].innerHTML = ( docElem.value * 10 ).toString();
-    docElem = document.getElementById( "sampleWavLen" + memString );
-    elem[ 0 ].childNodes[ 25 ].innerHTML = docElem.value.toString();
+    elem[ 0 ].childNodes[ 17 ].innerHTML = constrainValue( "sampleMeasLen" + memString, 1, 4096 );
+    elem[ 0 ].childNodes[ 21 ].innerHTML = constrainValue( "sampleRecTmp" + memString, 20, 300, 10 );
+    elem[ 0 ].childNodes[ 25 ].innerHTML = constrainValue( "sampleWavLen" + memString, 0, 64 * 1024 * 1024 );
 
     elem = entry.getElementsByTagName( "MASTER" );
     docElem = document.getElementById( "sampleTempo" + memString );
-    elem[ 0 ].childNodes[ 1 ].innerHTML = ( docElem.value * 10 ).toString();
+    elem[ 0 ].childNodes[ 1 ].innerHTML = constrainValue( "sampleTempo" + memString, 20, 300, 10 );
+    
     docElem = document.getElementById( "sampleFadeTime" + memString );
     elem[ 0 ].childNodes[ 9 ].innerHTML = getEntryIx( fadeTimes, docElem.value.toString() ).toString();
 
