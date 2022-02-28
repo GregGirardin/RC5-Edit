@@ -114,27 +114,21 @@ function generateConfigHTML()
   var accords;
   var tempHtml = "";
 
-  for( var memLoc = 0;memLoc <= memEntries.length;memLoc++ ) // valid memLoc <1 - 99> 
+  for( var memLoc = 1;memLoc <= memEntries.length;memLoc++ ) // valid memLoc <1 - 99> 
   {
     var memString;
 
     if( ( memLoc > 0 ) && ( ( memLoc % 10 ) == 0 ) )
-      tempHtml += "</br>";
-
-    var validLoc = ( ( memLoc >= 1 ) && ( memLoc <= 99 ) ) ? true : false;
-
-    tempHtml += "<button class='accordion'>";
-    if( validLoc )
-      memString = memLoc.toString();
-    else
-      memString = "--"; // not a valid memory slot
+      tempHtml += "<hr>";
+  
+    memString = memLoc.toString();
 
     if( memString.length == 1 )
       memString = "0" + memString;
-    tempHtml += memString + "</button>\n";
 
-    if( !validLoc )
-      continue; // 1 - 99.
+    var labelSuffix = memString;
+
+    memString += ". ";
 
     var entry = memEntries[ memLoc - 1 ]; // entries are 0 based.
 
@@ -144,7 +138,11 @@ function generateConfigHTML()
     for( var ix = 0;ix < 12;ix++ )
       loopName += String.fromCharCode( parseInt( elem[ 0 ].childNodes[ 1 + ix * 2 ].innerHTML ) );
 
-    var elem = entry.getElementsByTagName( "TRACK1" );
+    memString += loopName;
+
+    tempHtml += "<button class='accordion' id='accord" + labelSuffix + "'>" + memString + "</button>\n";
+
+    var elem    = entry.getElementsByTagName( "TRACK1" );
     var PlyLvl  = parseInt( elem[ 0 ].childNodes[  3 ].innerHTML );
     var Pan     = parseInt( elem[ 0 ].childNodes[  5 ].innerHTML );
     var One     = parseInt( elem[ 0 ].childNodes[  7 ].innerHTML );
@@ -154,7 +152,7 @@ function generateConfigHTML()
     var RecTmp  = parseInt( elem[ 0 ].childNodes[ 21 ].innerHTML );
     var WavLen  = parseInt( elem[ 0 ].childNodes[ 25 ].innerHTML );
 
-    var elem = entry.getElementsByTagName( "MASTER" );
+    var elem      = entry.getElementsByTagName( "MASTER" );
     var Tempo     = parseInt( elem[ 0 ].childNodes[ 1 ].innerHTML );
     var DubMode   = parseInt( elem[ 0 ].childNodes[ 3 ].innerHTML );
     var FadeTime  = parseInt( elem[ 0 ].childNodes[ 9 ].innerHTML );
@@ -163,21 +161,20 @@ function generateConfigHTML()
     var Beat = parseInt( elem[ 0 ].childNodes[ 13 ].innerHTML );
 
     tempHtml += "<div class='panel'>\n";
-    tempHtml += "Memory " + memString + "<br><br>\n";
-    tempHtml += "NameT: <input contenteditable='true' id='sampleNameT" + memString +
-                "' size='6' maxlength='6' value='" + loopName.substring( 0, 6 ) + "'><br>\n";
-    tempHtml += "NameB: <input contenteditable='true' id='sampleNameB" + memString +
+    tempHtml += "Name: <input contenteditable='true' id='sampleNameT" + labelSuffix +
+                "' size='6' maxlength='6' value='" + loopName.substring( 0, 6 ) + "'>\n";
+    tempHtml += "<input contenteditable='true' id='sampleNameB" + labelSuffix +
                 "' size='6' maxlength='6' value='" + loopName.substring( 6, 12 ) + "'><br>\n";
-    tempHtml += "PlyLvl: <input type='number' id='samplePlyLvl" + memString +
+    tempHtml += "PlyLvl: <input type='number' id='samplePlyLvl" + labelSuffix +
                 "' size='3' min='0' max='200' value='" + PlyLvl + "'><br>\n";
-    tempHtml += "Pan: <input type='number' id='samplePan" + memString +
+    tempHtml += "Pan: <input type='number' id='samplePan" + labelSuffix +
                 "' min='0' max='100' value='" + Pan + "'><br>\n";
 
     var c = One ? "checked" : "";
-    tempHtml += "One Shot: <input type='checkbox' id='sampleOne" + memString + "' " + c + "><br>\n";
+    tempHtml += "One Shot: <input type='checkbox' id='sampleOne" + labelSuffix + "' " + c + "><br>\n";
 
     // Start mode
-    tempHtml += "Start:<select id='sampleStartMode" + memString + "'>";
+    tempHtml += "Start:<select id='sampleStartMode" + labelSuffix + "'>";
     for( i = 0;i < startModes.length;i++ )
     {
       tempHtml += "<option value='" + startModes[ i ] + "' ";
@@ -188,7 +185,7 @@ function generateConfigHTML()
     tempHtml += "</select><br>\n";
 
     // Stop mode
-    tempHtml += "Stop:<select id='sampleStopMode" + memString + "'>";
+    tempHtml += "Stop:<select id='sampleStopMode" + labelSuffix + "'>";
     for( i = 0;i < stopModes.length;i++ )
     {
       tempHtml += "<option value='" + stopModes[ i ] + "' ";
@@ -199,7 +196,7 @@ function generateConfigHTML()
     tempHtml += "</select><br>\n";
 
     // fade time
-    tempHtml += "Fade:<select id='sampleFadeTime" + memString + "'>";
+    tempHtml += "Fade:<select id='sampleFadeTime" + labelSuffix + "'>";
     for( i = 0;i < fadeTimes.length;i++ )
     {
       tempHtml += "<option value='" + fadeTimes[ i ] + "' ";
@@ -209,15 +206,15 @@ function generateConfigHTML()
     }
     tempHtml += "</select><br>\n";
 
-    tempHtml += "Measures: <input type='number' id='sampleMeasLen" + memString + 
+    tempHtml += "Measures: <input type='number' id='sampleMeasLen" + labelSuffix + 
                 "' size='4' min='1' max='4096' value='" + MeasLen + "'><br>\n";
-    tempHtml += "Recorded Tempo: <input type='number' id='sampleRecTmp" + memString +
+    tempHtml += "Recorded Tempo: <input type='number' id='sampleRecTmp" + labelSuffix +
                 "' min='20.0' max='300.0' value='" + RecTmp / 10 + "'><br>\n";
-    tempHtml += "Samples: <input type='number' id='sampleWavLen" + memString +
+    tempHtml += "Samples: <input type='number' id='sampleWavLen" + labelSuffix +
                 "' min='512' max='10000000' value='" + WavLen + "'><br>\n";
-    tempHtml += "Tempo: <input type='number' id='sampleTempo" + memString +
+    tempHtml += "Tempo: <input type='number' id='sampleTempo" + labelSuffix +
                 "' min='20.0' max='300.0' value='" + Tempo / 10 + "'><br>\n";
-    tempHtml += "<button class='css_menuButton' onclick='convertToAsync(\"" + memString +
+    tempHtml += "<button class='css_menuButton' onclick='convertToAsync(\"" + labelSuffix +
                 "\", 0 );'>Async</button>";
     tempHtml += "</div>\n";
   }
@@ -226,7 +223,7 @@ function generateConfigHTML()
 
   accords = document.getElementsByClassName( "accordion" );
 
-  for( var i = 1;i < accords.length;i++ ) // Hack: start at 1 because first accordin is invalid "memory 00"
+  for( var i = 0;i < accords.length;i++ )
   {
     accords[ i ].addEventListener( "click", function() { accordionClick( this ); } );
     accords[ i ].nextElementSibling.addEventListener( "click", function() { this.previousElementSibling.scrollIntoView(); } );
@@ -241,6 +238,7 @@ function accordionClick( elem )
 
   if( wasOpen )
   {
+    updateAccordionText(); // when we close an accordion update all the accordion names.
     panel.style.display = "none"; 
     elem.classList.remove( "active" );
   }
@@ -248,8 +246,9 @@ function accordionClick( elem )
   {
     panel.style.display = "block";
     elem.classList.add( "active" );
-    elem.scrollIntoView();
   }
+
+  elem.scrollIntoView();
 }
 
 // If a sample is asynchronous, find values to prevent RC5 time stretching artifacts.
@@ -306,49 +305,69 @@ function constrainValue( elemId, min, max, factor=1 )
   return value.toString();
 }
 
-function saveConfig()
+function updateAccordionText()
 {
-  // apply all html elements to the XLM
   for( var memLoc = 1;memLoc <= memEntries.length;memLoc++ ) // valid memLoc < 1 - 99 > 
   {
-    var memString = memLoc.toString();
-    if( memString.length == 1 )
-      memString = "0" + memString;
+    var labelSuffix = memLoc.toString();
+    if( labelSuffix.length == 1 )
+      labelSuffix = "0" + labelSuffix;
 
     var entry = memEntries[ memLoc - 1 ]; // entries are 0 based.
 
     var elem = entry.getElementsByTagName( "NAME" );
-    var docElem = document.getElementById( "sampleNameT" + memString );
+    var docElem = document.getElementById( "sampleNameT" + labelSuffix );
     var nameString = ( docElem.value.toString() + "      " ).substring( 0, 6 );
-    var docElem = document.getElementById( "sampleNameB" + memString );
-    nameString += docElem.value.toString() + "      "; // pad with spaces.
+    var docElem = document.getElementById( "sampleNameB" + labelSuffix );
+    nameString += docElem.value.toString() + "      ".substring( 0, 12 ); // pad with spaces.
+
+    docElem = document.getElementById( "accord" + labelSuffix ); // update the accordion text.
+    docElem.innerText = labelSuffix + ". " + nameString;
+
+    docElem = document.getElementById( "accord" + labelSuffix ); // update the accordion text.
+    docElem.innerText = labelSuffix + ". " + nameString;
 
     for( var ix = 0;ix < 12;ix++ )
     {
       var charValue = nameString.charCodeAt( ix );
       elem[ 0 ].childNodes[ 1 + ix * 2 ].innerHTML = charValue.toString();
     }
+  }
+}
+
+function saveConfig()
+{
+  // apply all html elements to the XLM
+  updateAccordionText();
+
+  for( var memLoc = 1;memLoc <= memEntries.length;memLoc++ ) // valid memLoc < 1 - 99 > 
+  {
+    var labelSuffix = memLoc.toString();
+    if( labelSuffix.length == 1 )
+      labelSuffix = "0" + labelSuffix;
+
+    var entry = memEntries[ memLoc - 1 ]; // entries are 0 based.
 
     elem = entry.getElementsByTagName( "TRACK1" );
-    elem[ 0 ].childNodes[ 3 ].innerHTML = constrainValue( "samplePlyLvl" + memString, 0, 200 );
-    elem[ 0 ].childNodes[ 5 ].innerHTML = constrainValue( "samplePan" + memString, 0, 100 );
-    docElem = document.getElementById( "sampleOne" + memString );
+    elem[ 0 ].childNodes[ 3 ].innerHTML = constrainValue( "samplePlyLvl" + labelSuffix, 0, 200 );
+    elem[ 0 ].childNodes[ 5 ].innerHTML = constrainValue( "samplePan" + labelSuffix, 0, 100 );
+    docElem = document.getElementById( "sampleOne" + labelSuffix );
     elem[ 0 ].childNodes[ 7 ].innerHTML = ( docElem.value.toString() == "on" ) ? "1" : "0";
 
-    docElem = document.getElementById( "sampleStartMode" + memString );
+    docElem = document.getElementById( "sampleStartMode" + labelSuffix );
     elem[ 0 ].childNodes[ 9 ].innerHTML = getEntryIx( startModes, docElem.value.toString() ).toString();
-    docElem = document.getElementById( "sampleStopMode" + memString );
+    docElem = document.getElementById( "sampleStopMode" + labelSuffix );
     elem[ 0 ].childNodes[ 11 ].innerHTML = getEntryIx( stopModes, docElem.value.toString() ).toString();
 
-    elem[ 0 ].childNodes[ 17 ].innerHTML = constrainValue( "sampleMeasLen" + memString, 1, 4096 );
-    elem[ 0 ].childNodes[ 21 ].innerHTML = constrainValue( "sampleRecTmp" + memString, 20, 300, 10 );
-    elem[ 0 ].childNodes[ 25 ].innerHTML = constrainValue( "sampleWavLen" + memString, 0, 64 * 1024 * 1024 );
+    elem[ 0 ].childNodes[ 17 ].innerHTML = constrainValue( "sampleMeasLen" + labelSuffix, 1, 4096 );
+    elem[ 0 ].childNodes[ 21 ].innerHTML = constrainValue( "sampleRecTmp" + labelSuffix, 20, 300, 10 );
+    elem[ 0 ].childNodes[ 25 ].innerHTML = constrainValue( "sampleWavLen" + labelSuffix, 0, 64 * 1024 * 1024 );
 
     elem = entry.getElementsByTagName( "MASTER" );
-    docElem = document.getElementById( "sampleTempo" + memString );
-    elem[ 0 ].childNodes[ 1 ].innerHTML = constrainValue( "sampleTempo" + memString, 20, 300, 10 );
+    docElem = document.getElementById( "sampleTempo" + labelSuffix );
+    elem[ 0 ].childNodes[ 1 ].innerHTML = constrainValue( "sampleTempo" + labelSuffix, 20, 300, 10 );
     
-    docElem = document.getElementById( "sampleFadeTime" + memString );
+    docElem = document.getElementById( "sampleFadeTime" + labelSuffix );
     elem[ 0 ].childNodes[ 9 ].innerHTML = getEntryIx( fadeTimes, docElem.value.toString() ).toString();
 
     elem = entry.getElementsByTagName( "RHYTHM" );
@@ -366,7 +385,7 @@ function saveConfig()
   a.href = URL.createObjectURL( file );
   a.download = "MEMORY1.RC0";
   a.click();
-	URL.revokeObjectURL( a.href );
+  URL.revokeObjectURL( a.href );
 }
 
 </script>
