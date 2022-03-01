@@ -259,12 +259,8 @@ function convertToAsync( memString )
   if( !memIndex )
     return;
 
-  var entry = memEntries[ memIndex - 1 ]; // entries are 0 based.
-  var elem = entry.getElementsByTagName( "TRACK1" );
-  var waveLen = parseInt( elem[ 0 ].childNodes[ 25 ].innerHTML );
-
-  var docElem = document.getElementById( "sampleTempo" + memString );
-  var bpm = docElem.value;
+  var waveLen = document.getElementById( "sampleWavLen" + memString ).value;
+  var bpm = document.getElementById( "sampleTempo" + memString ).value;
 
   var nBeats = parseInt( waveLen * bpm / 2646000 );
   var nBeats4 = nBeats; // beats rounded up to a factor of 4 (4/4 time)
