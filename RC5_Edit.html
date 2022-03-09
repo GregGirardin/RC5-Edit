@@ -41,6 +41,7 @@
 <input type='file' class='css_menuButton' id='openConfigAction' style='display:none'>
 <button class='css_menuButton' id='openConfigButton' onclick='openConfig();'>Open</button>
 <button class='css_menuButton' id='saveConfigButton' onclick='saveConfig();'>Save</button>
+<button class='css_menuButton' id='syncAllToTempo' onclick='syncAllToTempo();'>Sync All To Tempo</button>
 <hr>
 <div id='fileData'> <img src="https://greggirardin.github.io/RC5.jpg"> </div>
 </div>
@@ -89,6 +90,7 @@ function openConfigFile( e )
   {
     var parser = new DOMParser();
     rc5_XML = parser.parseFromString( e.target.result, "text/xml" );
+
     memEntries = rc5_XML.getElementsByTagName( "mem" );
 
     generateConfigHTML();
@@ -214,8 +216,8 @@ function generateConfigHTML()
                 "' min='512' max='10000000' value='" + WavLen + "'><br>\n";
     tempHtml += "Tempo: <input type='number' id='sampleTempo" + labelSuffix +
                 "' min='20.0' max='300.0' value='" + Tempo / 10 + "'><br>\n";
-    tempHtml += "<button class='css_menuButton' onclick='convertToAsync(\"" + labelSuffix +
-                "\", 0 );'>Async</button>";
+    tempHtml += "<button class='css_menuButton' onclick='syncToTempo(\"" + labelSuffix +
+                "\", 0 );'>SyncToTempo</button>";
     tempHtml += "</div>\n";
   }
 
@@ -251,8 +253,21 @@ function accordionClick( elem )
   elem.scrollIntoView();
 }
 
+function syncAllToTempo()
+{
+  for( var memLoc = 1;memLoc <= 99;memLoc++ )
+  {
+    var memString = memLoc.toString();
+
+    if( memString.length == 1 )
+      memString = "0" + memString;
+
+    syncToTempo( memString );
+  }
+}
+
 // If a sample is asynchronous, find values to prevent RC5 time stretching artifacts.
-function convertToAsync( memString )
+function syncToTempo( memString )
 {
   var memIndex = parseInt( memString );
 
@@ -372,7 +387,6 @@ function saveConfig()
 
   // save the XLM file
   const a = document.createElement( 'a' );
-
   var serializer = new XMLSerializer();
   var xmlString = serializer.serializeToString( rc5_XML );
 
