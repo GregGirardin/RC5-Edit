@@ -91,6 +91,14 @@ function openConfigFile( e )
     var parser = new DOMParser();
     rc5_XML = parser.parseFromString( e.target.result, "text/xml" );
 
+    // This is here because the RC5 inserts garbage after the closing </database> tag
+    // If our output file contains <parseerror> the RC5 will reject the file
+    parseErrors = rc5_XML.getElementsByTagName( "parsererror" );
+
+    if( parseErrors )
+      for( let error of parseErrors )
+        error.remove();
+
     memEntries = rc5_XML.getElementsByTagName( "mem" );
 
     generateConfigHTML();
