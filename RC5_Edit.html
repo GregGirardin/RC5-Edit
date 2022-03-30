@@ -54,8 +54,32 @@ var memEntries;
 
 var startModes = [ "Immediate", "Fade In" ];
 var stopModes = [ "Immediate", "Fade Out", "Loop End" ];
-var dubModes = [ "Overdub", "Replace" ];
+// var dubModes = [ "Overdub", "Replace" ];
 var fadeTimes = [ "1/16", "1/8", "1/4", "1/2", "1M", "2M", "3M", "4M" ];
+var rhyPatterns = [ "Simple 1", "Simple 2", "Simple 3", "Simple 4",
+                    "Groove 1", "Groove 2", "Groove 3", "Groove 4", "Groove 5", "Groove 6", "Groove 7",
+                    "Rock 1", "Rock 2", "Rock 3", "Rock 4",
+                    "Funk 1", "Funk 2", "Funk 3", "Funk 4",
+                     "Shuffle 1", "Shuffle 2", "Shuffle 3", "Shuffle 4", "Shuffle 5",
+                    "Swing 1", "Swing 2", "Swing 3", "Swing 4", "Swing 5",
+                    "Side 1", "Side 2", "Side 3", "Side 4", "Side 5",
+                    "Percus 1", "Percus 2", "Percus 3", "Percus 4",
+                    "Latin 1", "Latin 2", "Latin 3", "Latin 4",
+                    "Conga 1", "Conga 2", "Conga 3",
+                    "Bossa 1", "Bossa 2",
+                    "Samba 1", "Samba 2",
+                    "Dance 1", "Dance 2", "Dance 3", "Dance 4",
+                    "Metro 1", "Metro 2", "Metro 3", "Metro 4",
+                    "Blank" ];
+var rhyVariations = [ "A", "B" ];
+var rhyVarChanges = [ "Meas", "End" ];
+var rhyKits = [ "Studio", "Rock", "Jazz", "Brush", "Cajon", "R&B", "808" ];
+var rhyStarts = [ "Loop Start", "Rec End", "Before Loop" ];
+var rhyStops = [ "Off", "Loop Stop", "Rec End" ];
+var rhyCounts = [ "Off", "1M" ];
+var rhyOffOn = [ "Off", "On" ];
+var rhyTones = [ "-10", "-9", "-8", "-7", "-6", "-5", "-4", "-3", "-2", "-1",
+                 "0", "+1", "+2", "+3", "+4", "+5", "+6", "+7", "+8", "+9", "+10" ];
 
 //////////////////////////// //////////////////////////// ////////////////////////////
 //////////////////////////// //////////////////////////// ////////////////////////////
@@ -119,6 +143,22 @@ function getEntryIx( array, entry )
   return -1;
 }
 
+function genDropDown( dispString, id, value, valTable )
+{
+  var genHtml = dispString + "<select id='" + id + "'>";
+
+  for( var i = 0;i < valTable.length;i++ )
+  {
+    genHtml += "<option value='" + valTable[ i ] + "' ";
+    if( value == i )
+      genHtml += "selected='selected'";
+    genHtml += ">" + valTable[ i ] + "</option>";
+  }
+  genHtml += "</select>\n";
+
+  return genHtml;
+}
+
 function generateConfigHTML()
 {
   var accords;
@@ -158,74 +198,78 @@ function generateConfigHTML()
     var One     = parseInt( elem[ 0 ].childNodes[  7 ].innerHTML );
     var StrtMod = parseInt( elem[ 0 ].childNodes[  9 ].innerHTML );
     var StpMod  = parseInt( elem[ 0 ].childNodes[ 11 ].innerHTML );
-    var MeasLen = parseInt( elem[ 0 ].childNodes[ 17 ].innerHTML );
+    // var MeasLen = parseInt( elem[ 0 ].childNodes[ 17 ].innerHTML );
     var RecTmp  = parseInt( elem[ 0 ].childNodes[ 21 ].innerHTML );
     var WavLen  = parseInt( elem[ 0 ].childNodes[ 25 ].innerHTML );
-
     var elem      = entry.getElementsByTagName( "MASTER" );
     var Tempo     = parseInt( elem[ 0 ].childNodes[ 1 ].innerHTML );
-    var DubMode   = parseInt( elem[ 0 ].childNodes[ 3 ].innerHTML );
+    // var DubMode   = parseInt( elem[ 0 ].childNodes[ 3 ].innerHTML );
     var FadeTime  = parseInt( elem[ 0 ].childNodes[ 9 ].innerHTML );
 
     var elem = entry.getElementsByTagName( "RHYTHM" );
-    var Beat = parseInt( elem[ 0 ].childNodes[ 13 ].innerHTML );
+    var rhyLevel = parseInt( elem[ 0 ].childNodes[ 1 ].innerHTML );
+    var rhyReverb = parseInt( elem[ 0 ].childNodes[ 3 ].innerHTML );
+    var rhyPattern = parseInt( elem[ 0 ].childNodes[ 5 ].innerHTML );
+    var rhyVariation = parseInt( elem[ 0 ].childNodes[ 7 ].innerHTML );
+    var rhyVariationChg = parseInt( elem[ 0 ].childNodes[ 9 ].innerHTML );
+    var rhyKit = parseInt( elem[ 0 ].childNodes[ 11 ].innerHTML );
+    // var rhyBeat = parseInt( elem[ 0 ].childNodes[ 13 ].innerHTML );
+    var rhyFill = parseInt( elem[ 0 ].childNodes[ 15 ].innerHTML );
+    var rhyPart1 = parseInt( elem[ 0 ].childNodes[ 17 ].innerHTML );
+    var rhyPart2 = parseInt( elem[ 0 ].childNodes[ 19 ].innerHTML );
+    var rhyPart3 = parseInt( elem[ 0 ].childNodes[ 21 ].innerHTML );
+    var rhyPart4 = parseInt( elem[ 0 ].childNodes[ 23 ].innerHTML );
+    var rhyRecCount = parseInt( elem[ 0 ].childNodes[ 25 ].innerHTML );
+    var rhyPlayCount = parseInt( elem[ 0 ].childNodes[ 27 ].innerHTML );
+    var rhyStart = parseInt( elem[ 0 ].childNodes[ 29 ].innerHTML );
+    var rhyStop = parseInt( elem[ 0 ].childNodes[ 31 ].innerHTML );
+    var rhyToneLow = parseInt( elem[ 0 ].childNodes[ 33 ].innerHTML );
+    var rhyToneHigh = parseInt( elem[ 0 ].childNodes[ 35 ].innerHTML );
+    var rhyState = parseInt( elem[ 0 ].childNodes[ 37 ].innerHTML );
 
     tempHtml += "<div class='panel'>\n";
-    tempHtml += "Name: <input contenteditable='true' id='sampleNameT" + labelSuffix +
-                "' size='6' maxlength='6' value='" + loopName.substring( 0, 6 ) + "'>\n";
-    tempHtml += "<input contenteditable='true' id='sampleNameB" + labelSuffix +
-                "' size='6' maxlength='6' value='" + loopName.substring( 6, 12 ) + "'><br>\n";
-    tempHtml += "PlyLvl: <input type='number' id='samplePlyLvl" + labelSuffix +
-                "' size='3' min='0' max='200' value='" + PlyLvl + "'><br>\n";
-    tempHtml += "Pan: <input type='number' id='samplePan" + labelSuffix +
-                "' min='0' max='100' value='" + Pan + "'><br>\n";
+    tempHtml += "<b>- Sample -</b><br>";
+    tempHtml += "Name <input contenteditable='true' id='sampleNameT" + labelSuffix + "' size='6' maxlength='6' value='" + loopName.substring( 0, 6 ) + "'>\n";
+    tempHtml += "<input contenteditable='true' id='sampleNameB" + labelSuffix + "' size='6' maxlength='6' value='" + loopName.substring( 6, 12 ) + "'>\n";
+    tempHtml += "Level <input type='number' id='samplePlyLvl" + labelSuffix + "' size='2' min='0' max='200' value='" + PlyLvl + "'>\n";
+    tempHtml += "Pan <input type='number' id='samplePan" + labelSuffix + "' min='0' max='100' value='" + Pan + "'>\n";
 
     var c = One ? "checked" : "";
-    tempHtml += "One Shot: <input type='checkbox' id='sampleOne" + labelSuffix + "' " + c + "><br>\n";
+    tempHtml += "One Shot: <input type='checkbox' id='sampleOne" + labelSuffix + "' " + c + ">\n";
+    tempHtml += "<br>";
+    tempHtml += genDropDown( "Start", "sampleStartMode" + labelSuffix, StrtMod, startModes );
+    tempHtml += genDropDown( "Stop", "sampleStopMode" + labelSuffix, StpMod, stopModes );
+    tempHtml += genDropDown( "Fade", "sampleFadeTime" + labelSuffix, FadeTime, fadeTimes );
 
-    // Start mode
-    tempHtml += "Start:<select id='sampleStartMode" + labelSuffix + "'>";
-    for( i = 0;i < startModes.length;i++ )
-    {
-      tempHtml += "<option value='" + startModes[ i ] + "' ";
-      if( StrtMod == i )
-        tempHtml += "selected='selected'";
-      tempHtml += ">" + startModes[ i ] + "</option>";
-    }
-    tempHtml += "</select><br>\n";
+    // tempHtml += "Measures: <input type='number' id='sampleMeasLen" + labelSuffix +  "' size='4' min='1' max='4096' value='" + MeasLen + "'><br>\n";
+    tempHtml += "Rec Tempo: <input type='number' id='sampleRecTmp" + labelSuffix + "' min='20.0' max='300.0' value='" + RecTmp / 10 + "'>\n";
+    tempHtml += "Samples: <input type='number' id='sampleWavLen" + labelSuffix +  "' min='512' max='10000000' value='" + WavLen + "'><br>\n";
+    tempHtml += "Tempo: <input type='number' id='sampleTempo" + labelSuffix + "' min='20.0' max='300.0' value='" + Tempo / 10 + "'>\n";
+    tempHtml += "<button class='css_menuButton' onclick='syncToTempo(\"" + labelSuffix + "\", 0 );'>SyncToTempo</button><br>";
 
-    // Stop mode
-    tempHtml += "Stop:<select id='sampleStopMode" + labelSuffix + "'>";
-    for( i = 0;i < stopModes.length;i++ )
-    {
-      tempHtml += "<option value='" + stopModes[ i ] + "' ";
-      if( StpMod == i )
-        tempHtml += "selected='selected'";
-      tempHtml += ">" + stopModes[ i ] + "</option>";
-    }
-    tempHtml += "</select><br>\n";
+    // Rhythm
+    tempHtml += "<b>- Rhythm -</b><br>";
+    tempHtml += genDropDown( "State", "sampleRhyState" + labelSuffix, rhyState, rhyOffOn );
 
-    // fade time
-    tempHtml += "Fade:<select id='sampleFadeTime" + labelSuffix + "'>";
-    for( i = 0;i < fadeTimes.length;i++ )
-    {
-      tempHtml += "<option value='" + fadeTimes[ i ] + "' ";
-      if( FadeTime == i )
-        tempHtml += "selected='selected'";
-      tempHtml += ">" + fadeTimes[ i ] + "</option>";
-    }
-    tempHtml += "</select><br>\n";
+    tempHtml += "Level: <input type='number' id='sampleRhyLevel" + labelSuffix + "' size='3' min='0' max='200' value='" + rhyLevel + "'>\n";
+    tempHtml += "Reverb: <input type='number' id='sampleRhyReverb" + labelSuffix + "' size='3' min='0' max='100' value='" + rhyReverb + "'>\n";
 
-    tempHtml += "Measures: <input type='number' id='sampleMeasLen" + labelSuffix + 
-                "' size='4' min='1' max='4096' value='" + MeasLen + "'><br>\n";
-    tempHtml += "Recorded Tempo: <input type='number' id='sampleRecTmp" + labelSuffix +
-                "' min='20.0' max='300.0' value='" + RecTmp / 10 + "'><br>\n";
-    tempHtml += "Samples: <input type='number' id='sampleWavLen" + labelSuffix +
-                "' min='512' max='10000000' value='" + WavLen + "'><br>\n";
-    tempHtml += "Tempo: <input type='number' id='sampleTempo" + labelSuffix +
-                "' min='20.0' max='300.0' value='" + Tempo / 10 + "'><br>\n";
-    tempHtml += "<button class='css_menuButton' onclick='syncToTempo(\"" + labelSuffix +
-                "\", 0 );'>SyncToTempo</button>";
+    tempHtml += genDropDown( "Pattern", "sampleRhyPattern" + labelSuffix, rhyPattern, rhyPatterns );
+    tempHtml += genDropDown( "Variation", "sampleRhyVariation" + labelSuffix, rhyVariation, rhyVariations );
+    tempHtml += genDropDown( "Change", "sampleRhyVariationChg" + labelSuffix, rhyVariationChg, rhyVarChanges );
+    tempHtml += genDropDown( "Kit", "sampleRhyKit" + labelSuffix, rhyKit, rhyKits );
+    tempHtml += genDropDown( "Fill", "sampleRhyFill" + labelSuffix, rhyFill, rhyOffOn ) + "<br>";
+    tempHtml += genDropDown( "Parts", "sampleRhyPart1" + labelSuffix, rhyPart1, rhyOffOn );
+    tempHtml += genDropDown( "", "sampleRhyPart2" + labelSuffix, rhyPart2, rhyOffOn );
+    tempHtml += genDropDown( "", "sampleRhyPart3" + labelSuffix, rhyPart3, rhyOffOn );
+    tempHtml += genDropDown( "", "sampleRhyPart4" + labelSuffix, rhyPart4, rhyOffOn );
+    tempHtml += genDropDown( "Rec Count", "sampleRhyRecCount" + labelSuffix, rhyRecCount, rhyCounts );
+    tempHtml += genDropDown( "Play Count", "sampleRhyPlayCount" + labelSuffix, rhyPlayCount, rhyCounts ) + "<br>";
+    tempHtml += genDropDown( "Start", "sampleRhyStart" + labelSuffix, rhyStart, rhyStarts );
+    tempHtml += genDropDown( "Stop", "sampleRhyStop" + labelSuffix, rhyStop, rhyStops );
+    tempHtml += genDropDown( "Tone Low", "sampleRhyToneLow" + labelSuffix, rhyToneLow, rhyTones );
+    tempHtml += genDropDown( "Tone High", "sampleRhyToneHigh" + labelSuffix, rhyToneHigh, rhyTones );
+
     tempHtml += "</div>\n";
   }
 
@@ -275,6 +319,7 @@ function syncAllToTempo()
 }
 
 // If a sample is asynchronous, find values to prevent RC5 time stretching artifacts.
+// RC5 may have fixed this issue so maybe this can be deprecated.
 function syncToTempo( memString )
 {
   var memIndex = parseInt( memString );
@@ -304,10 +349,10 @@ function syncToTempo( memString )
   elem.value = waveLenAdj;
 }
 
-// Given an DOM element that has in int value, 
-// constrain the value
-// update the DOM element
-// return a string of its value.
+// Given a DOM element that has in int value:
+// Constrain the value
+// Update the DOM element
+// Return a string of its value.
 function constrainValue( elemId, min, max, factor=1 )
 {
   var value = document.getElementById( elemId ).value;
@@ -370,27 +415,37 @@ function saveConfig()
     elem = entry.getElementsByTagName( "TRACK1" );
     elem[ 0 ].childNodes[ 3 ].innerHTML = constrainValue( "samplePlyLvl" + labelSuffix, 0, 200 );
     elem[ 0 ].childNodes[ 5 ].innerHTML = constrainValue( "samplePan" + labelSuffix, 0, 100 );
-    docElem = document.getElementById( "sampleOne" + labelSuffix );
-    elem[ 0 ].childNodes[ 7 ].innerHTML = ( docElem.value.toString() == "on" ) ? "1" : "0";
-
-    docElem = document.getElementById( "sampleStartMode" + labelSuffix );
-    elem[ 0 ].childNodes[ 9 ].innerHTML = getEntryIx( startModes, docElem.value.toString() ).toString();
-    docElem = document.getElementById( "sampleStopMode" + labelSuffix );
-    elem[ 0 ].childNodes[ 11 ].innerHTML = getEntryIx( stopModes, docElem.value.toString() ).toString();
-
-    elem[ 0 ].childNodes[ 17 ].innerHTML = constrainValue( "sampleMeasLen" + labelSuffix, 1, 4096 );
+    elem[ 0 ].childNodes[ 7 ].innerHTML = ( document.getElementById( "sampleOne" + labelSuffix ).value.toString() == "on" ) ? "1" : "0";
+    elem[ 0 ].childNodes[ 9 ].innerHTML = getEntryIx( startModes, document.getElementById( "sampleStartMode" + labelSuffix ).value.toString() ).toString();
+    elem[ 0 ].childNodes[ 11 ].innerHTML = getEntryIx( stopModes, document.getElementById( "sampleStopMode" + labelSuffix ).value.toString() ).toString();
+    //elem[ 0 ].childNodes[ 17 ].innerHTML = constrainValue( "sampleMeasLen" + labelSuffix, 1, 4096 );
     elem[ 0 ].childNodes[ 21 ].innerHTML = constrainValue( "sampleRecTmp" + labelSuffix, 20, 300, 10 );
     elem[ 0 ].childNodes[ 25 ].innerHTML = constrainValue( "sampleWavLen" + labelSuffix, 0, 64 * 1024 * 1024 );
 
     elem = entry.getElementsByTagName( "MASTER" );
-    docElem = document.getElementById( "sampleTempo" + labelSuffix );
     elem[ 0 ].childNodes[ 1 ].innerHTML = constrainValue( "sampleTempo" + labelSuffix, 20, 300, 10 );
-    
-    docElem = document.getElementById( "sampleFadeTime" + labelSuffix );
-    elem[ 0 ].childNodes[ 9 ].innerHTML = getEntryIx( fadeTimes, docElem.value.toString() ).toString();
+    elem[ 0 ].childNodes[ 9 ].innerHTML = getEntryIx( fadeTimes, document.getElementById( "sampleFadeTime" + labelSuffix ).value.toString() ).toString();
 
     elem = entry.getElementsByTagName( "RHYTHM" );
-    elem[ 0 ].childNodes[ 13 ].innerHTML = "2"; // 4/4
+    elem[ 0 ].childNodes[  1 ].innerHTML = constrainValue( "sampleRhyLevel" + labelSuffix, 0, 200 );
+    elem[ 0 ].childNodes[  3 ].innerHTML = constrainValue( "sampleRhyReverb" + labelSuffix, 0, 100 );
+    elem[ 0 ].childNodes[  5 ].innerHTML = getEntryIx( rhyPatterns, document.getElementById( "sampleRhyPattern" + labelSuffix ).value.toString() ).toString();
+    elem[ 0 ].childNodes[  7 ].innerHTML = getEntryIx( rhyVariations, document.getElementById( "sampleRhyVariation" + labelSuffix ).value.toString() ).toString();
+    elem[ 0 ].childNodes[  9 ].innerHTML = getEntryIx( rhyVarChanges, document.getElementById( "sampleRhyVariationChg" + labelSuffix ).value.toString() ).toString();
+    elem[ 0 ].childNodes[ 11 ].innerHTML = getEntryIx( rhyKits, document.getElementById( "sampleRhyKit" + labelSuffix ).value.toString() ).toString();
+    // elem[ 0 ].childNodes[ 13 ].innerHTML = "2"; // 4/4
+    elem[ 0 ].childNodes[ 15 ].innerHTML = getEntryIx( rhyOffOn, document.getElementById( "sampleRhyFill" + labelSuffix ).value.toString() ).toString();
+    elem[ 0 ].childNodes[ 17 ].innerHTML = getEntryIx( rhyOffOn, document.getElementById( "sampleRhyPart1" + labelSuffix ).value.toString() ).toString();
+    elem[ 0 ].childNodes[ 19 ].innerHTML = getEntryIx( rhyOffOn, document.getElementById( "sampleRhyPart2" + labelSuffix ).value.toString() ).toString();
+    elem[ 0 ].childNodes[ 21 ].innerHTML = getEntryIx( rhyOffOn, document.getElementById( "sampleRhyPart3" + labelSuffix ).value.toString() ).toString();
+    elem[ 0 ].childNodes[ 23 ].innerHTML = getEntryIx( rhyOffOn, document.getElementById( "sampleRhyPart4" + labelSuffix ).value.toString() ).toString();
+    elem[ 0 ].childNodes[ 25 ].innerHTML = getEntryIx( rhyCounts, document.getElementById( "sampleRhyRecCount" + labelSuffix ).value.toString() ).toString();
+    elem[ 0 ].childNodes[ 27 ].innerHTML = getEntryIx( rhyCounts, document.getElementById( "sampleRhyPlayCount" + labelSuffix ).value.toString() ).toString();
+    elem[ 0 ].childNodes[ 29 ].innerHTML = getEntryIx( rhyStarts, document.getElementById( "sampleRhyStart" + labelSuffix ).value.toString() ).toString();
+    elem[ 0 ].childNodes[ 31 ].innerHTML = getEntryIx( rhyStops, document.getElementById( "sampleRhyStop" + labelSuffix ).value.toString() ).toString();
+    elem[ 0 ].childNodes[ 33 ].innerHTML = getEntryIx( rhyTones, document.getElementById( "sampleRhyToneLow" + labelSuffix ).value.toString() ).toString();
+    elem[ 0 ].childNodes[ 35 ].innerHTML = getEntryIx( rhyTones, document.getElementById( "sampleRhyToneHigh" + labelSuffix ).value.toString() ).toString();
+    elem[ 0 ].childNodes[ 37 ].innerHTML = getEntryIx( rhyOffOn, document.getElementById( "sampleRhyState" + labelSuffix ).value.toString() ).toString();
   }
 
   // save the XLM file
