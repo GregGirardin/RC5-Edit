@@ -198,7 +198,7 @@ function generateConfigHTML()
     var One     = parseInt( elem[ 0 ].childNodes[  7 ].innerHTML );
     var StrtMod = parseInt( elem[ 0 ].childNodes[  9 ].innerHTML );
     var StpMod  = parseInt( elem[ 0 ].childNodes[ 11 ].innerHTML );
-    // var MeasLen = parseInt( elem[ 0 ].childNodes[ 17 ].innerHTML );
+    var MeasLen = parseInt( elem[ 0 ].childNodes[ 17 ].innerHTML );
     var RecTmp  = parseInt( elem[ 0 ].childNodes[ 21 ].innerHTML );
     var WavLen  = parseInt( elem[ 0 ].childNodes[ 25 ].innerHTML );
     var elem      = entry.getElementsByTagName( "MASTER" );
@@ -241,7 +241,7 @@ function generateConfigHTML()
     tempHtml += genDropDown( "Stop", "sampleStopMode" + labelSuffix, StpMod, stopModes );
     tempHtml += genDropDown( "Fade", "sampleFadeTime" + labelSuffix, FadeTime, fadeTimes );
 
-    // tempHtml += "Measures: <input type='number' id='sampleMeasLen" + labelSuffix +  "' size='4' min='1' max='4096' value='" + MeasLen + "'><br>\n";
+    tempHtml += "Measures: <input type='number' id='sampleMeasLen" + labelSuffix +  "' size='4' min='1' max='4096' value='" + MeasLen + "'><br>\n";
     tempHtml += "Rec Tempo: <input type='number' id='sampleRecTmp" + labelSuffix + "' min='20.0' max='300.0' value='" + RecTmp / 10 + "'>\n";
     tempHtml += "Samples: <input type='number' id='sampleWavLen" + labelSuffix +  "' min='512' max='10000000' value='" + WavLen + "'><br>\n";
     tempHtml += "Tempo: <input type='number' id='sampleTempo" + labelSuffix + "' min='20.0' max='300.0' value='" + Tempo / 10 + "'>\n";
@@ -418,7 +418,7 @@ function saveConfig()
     elem[ 0 ].childNodes[ 7 ].innerHTML = ( document.getElementById( "sampleOne" + labelSuffix ).value.toString() == "on" ) ? "1" : "0";
     elem[ 0 ].childNodes[ 9 ].innerHTML = getEntryIx( startModes, document.getElementById( "sampleStartMode" + labelSuffix ).value.toString() ).toString();
     elem[ 0 ].childNodes[ 11 ].innerHTML = getEntryIx( stopModes, document.getElementById( "sampleStopMode" + labelSuffix ).value.toString() ).toString();
-    //elem[ 0 ].childNodes[ 17 ].innerHTML = constrainValue( "sampleMeasLen" + labelSuffix, 1, 4096 );
+    elem[ 0 ].childNodes[ 17 ].innerHTML = constrainValue( "sampleMeasLen" + labelSuffix, 1, 4096 );
     elem[ 0 ].childNodes[ 21 ].innerHTML = constrainValue( "sampleRecTmp" + labelSuffix, 20, 300, 10 );
     elem[ 0 ].childNodes[ 25 ].innerHTML = constrainValue( "sampleWavLen" + labelSuffix, 0, 64 * 1024 * 1024 );
 
