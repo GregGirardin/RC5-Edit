@@ -143,6 +143,48 @@ function getEntryIx( array, entry )
   return -1;
 }
 
+//////////////////// ////////////////////
+// Drag & drop stuff
+//////////////////// ////////////////////
+function allowDrop( ev ) { ev.preventDefault(); }
+function dragElem( ev ) { ev.dataTransfer.setData( "dragElem", ev.target.id ); }
+
+// Handle a sample being moved.
+// TBD: provide a way to move the wav files on the RC-5. Currently that has to be done manually.
+function dropElem( ev )
+{
+  const sampName = "accord.";
+
+  ev.preventDefault();
+  var dragElem = ev.dataTransfer.getData( "dragElem" );
+
+  if( ( dragElem.substring( 0, sampName.length ) == sampName ) &&
+      ( ev.target.id.substring( 0, sampName.length ) == sampName ) ) // dropping samples
+  {
+    // Indexes are encoded in the element id ex: id="accord.32"
+    var indexes = dragElem.substring( sampName.length, ).split( "." );
+    var fromSamp = parseInt( indexes[ 0 ] );
+
+    indexes = ev.target.id.substring( sampName.length, ).split( "." );
+    var toSamp = parseInt( indexes[ 0 ] );
+
+    // console.log( fromSamp + " -> " + toSamp );
+    if( toSamp < fromSamp )
+      memEntries[ toSamp - 1 ].parentNode.insertBefore( memEntries[ fromSamp - 1 ], memEntries[ toSamp - 1 ] );
+    else
+      memEntries[ toSamp  ].parentNode.insertBefore( memEntries[ fromSamp - 1 ], memEntries[ toSamp ] );
+
+    // Renumber the mem id's, want the first element to be id="0" then id="1" up to 98
+    for( var index = 0;index < 99;index++)
+      memEntries[ index ].id = index.toString();
+
+    generateConfigHTML();
+  }
+  else
+    console.log( "Unhandled element move." );
+}
+
+
 function genDropDown( dispString, id, value, valTable )
 {
   var genHtml = dispString + "<select id='" + id + "'>";
@@ -168,7 +210,7 @@ function generateConfigHTML()
   {
     var memString;
 
-    if( ( memLoc > 0 ) && ( ( memLoc % 10 ) == 0 ) )
+    if( ( memLoc % 10 ) == 0 )
       tempHtml += "<hr>";
   
     memString = memLoc.toString();
@@ -190,7 +232,10 @@ function generateConfigHTML()
 
     memString += loopName;
 
-    tempHtml += "<button class='accordion' id='accord" + labelSuffix + "'>" + memString + "</button>\n";
+    //tempHtml += "<button class='accordion' id='accord" + labelSuffix + "'>" + memString + "</button>\n";
+
+     tempHtml += "<button id='accord." + labelSuffix + "' class='accordion' draggable='true' " +
+                 "ondrop='dropElem( event )' ondragover='allowDrop( event )' ondragstart='dragElem( event )'>" + memString + "</button>\n";
 
     var elem    = entry.getElementsByTagName( "TRACK1" );
     var PlyLvl  = parseInt( elem[ 0 ].childNodes[  3 ].innerHTML );
@@ -305,6 +350,16 @@ function accordionClick( elem )
   elem.scrollIntoView();
 }
 
+function closeAll()
+{
+  // Close all accordions
+  for( var i = 0;i < accords.length;i++ )
+  {
+    accords[ i ].nextElementSibling.style.display = "none"; 
+    accords[ i ].classList.remove( "active" );
+  }
+}
+
 function syncAllToTempo()
 {
   for( var memLoc = 1;memLoc <= 99;memLoc++ )
@@ -385,10 +440,10 @@ function updateAccordionText()
     var docElem = document.getElementById( "sampleNameB" + labelSuffix );
     nameString += docElem.value.toString() + "      ".substring( 0, 12 ); // pad with spaces.
 
-    docElem = document.getElementById( "accord" + labelSuffix ); // update the accordion text.
+    docElem = document.getElementById( "accord." + labelSuffix ); // update the accordion text.
     docElem.innerText = labelSuffix + ". " + nameString;
 
-    docElem = document.getElementById( "accord" + labelSuffix ); // update the accordion text.
+    docElem = document.getElementById( "accord." + labelSuffix ); // update the accordion text.
     docElem.innerText = labelSuffix + ". " + nameString;
 
     for( var ix = 0;ix < 12;ix++ )
