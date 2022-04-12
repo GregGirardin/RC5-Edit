@@ -33,45 +33,6 @@ RC5_WAV_DIR = "/Volumes/BOSS RC-5/ROLAND/WAVE/"
 RC5_DATA_DIR = "/Volumes/BOSS RC-5/ROLAND/DATA/"
 WAVE_FILE = "waves.txt"
 
-def getInput():
-  # Copied from http://stackoverflow.com/questions/983354/how-do-i-make-python-to-wait-for-a-pressed-key
-  import termios, fcntl, sys, os
-  fd = sys.stdin.fileno()
-  flags_save = fcntl.fcntl( fd, fcntl.F_GETFL )
-  attrs_save = termios.tcgetattr( fd )
-  attrs = list( attrs_save )
-  attrs[ 0 ] &= ~( termios.IGNBRK | termios.BRKINT | termios.PARMRK | termios.ISTRIP |
-                   termios.INLCR  | termios.IGNCR  | termios.ICRNL  | termios.IXON )
-  attrs[ 1 ] &= ~termios.OPOST
-  attrs[ 2 ] &= ~( termios.CSIZE | termios.PARENB )
-  attrs[ 2 ] |= termios.CS8
-  attrs[ 3 ] &= ~( termios.ECHONL | termios.ECHO | termios.ICANON | termios.ISIG | termios.IEXTEN )
-  termios.tcsetattr( fd, termios.TCSANOW, attrs )
-  fcntl.fcntl( fd, fcntl.F_SETFL, flags_save & ~os.O_NONBLOCK )
-  try:
-    ret = sys.stdin.read( 1 )
-    if ord( ret ) == 27: # Escape
-      ret = sys.stdin.read( 1 )
-      ret = sys.stdin.read( 1 )
-      if ret == 'A':
-        ret = 'UP'
-      elif ret == 'B':
-        ret = 'DOWN'
-      elif ret == 'C':
-        ret = 'RIGHT'
-      elif ret == 'D':
-        ret = 'LEFT'
-      else:
-        print( int( ret ) )
-        exit()
-
-  except KeyboardInterrupt:
-    ret = 0
-  finally:
-    termios.tcsetattr( fd, termios.TCSAFLUSH, attrs_save )
-    fcntl.fcntl( fd, fcntl.F_SETFL, flags_save )
-  return ret
-
 # Open waves.txt
 if not os.path.exists( WAVE_FILE ):
   print( WAVE_FILE, "does not exist." )
@@ -80,14 +41,6 @@ if not os.path.exists( WAVE_FILE ):
 if not os.path.exists( RC5_WAV_DIR ):
   print( "Path to RC5 does not exist." )
   exit()
-
-print( "Backup files from RC-5 locally?" )
-ch = getInput()
-if( ch == 'y' or ch == "Y" ):
-  print( "TBD: Backing up..." )
-  exit()
-  # make backupdir
-  # Copy all waves locally and create a waves.txt
 
 # clear directory
 print( "Deleting wav files." )
