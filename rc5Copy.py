@@ -30,6 +30,7 @@ from __future__ import print_function
 import os, shutil, glob, copy, sys
 
 RC5_WAV_DIR = "/Volumes/BOSS RC-5/ROLAND/WAVE/"
+RC5_DATA_DIR = "/Volumes/BOSS RC-5/ROLAND/DATA/"
 WAVE_FILE = "waves.txt"
 
 def getInput():
@@ -91,7 +92,7 @@ if( ch == 'y' or ch == "Y" ):
 # clear directory
 print( "Deleting wav files." )
 
-for fileIndex in range( 1, 99 ):
+for fileIndex in range( 1, 100 ):
   dirName = RC5_WAV_DIR + ( "00" if( fileIndex < 10 ) else "0" ) + str( fileIndex ) + "_1";
 
   for filename in os.listdir( dirName ):
@@ -122,8 +123,12 @@ for line in fLines:
       print( "Copying:" + fileName )
       dirName = RC5_WAV_DIR + ( "00" if( fileIndex < 10 ) else "0" ) + str( fileIndex ) + "_1";
       shutil.copy( fileName, dirName )
-      # destDir = RC5_WAV_DIR + 
     else:
       print( "? #" + fileIndex + " " + fileName )
+
+if os.path.isfile( "MEMORY1.RC0" ):
+  print( "Copying MEMORY1.RC0" )
+  shutil.copy( "MEMORY1.RC0", RC5_DATA_DIR )
+  shutil.copy( "MEMORY1.RC0", RC5_DATA_DIR + "MEMORY2.RC0" )
 
 print( "Complete." )
