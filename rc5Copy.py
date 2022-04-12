@@ -4,34 +4,32 @@ python sample copier for BOSS RC-5 looper
 Greg Girardin
 girardin1972@hotmail.com
 
-In the local directory there should be a waves.txt and a collection of wav files.
-Each line of waves.txt (up to line 98) should be the name of a .wav file in the local directory
+In the local directory create a file called waves.txt with the names of the .wav files to be copied.
+Each line of waves.txt (up to line 99) should be the name of a .wav file in the local directory.
 
-line 0: myWave1.wav
-line 1: myWave2.wav
+line 1: myWave1.wav
+line 2: myWave2.wav
 .
 .
-line 98: myWave99.wav
+line 99: myWave99.wav
 
-For example, you could create waves.txt from the shell
+For example, you could create waves.txt from the shell as follows
 
   shell% ls *.wav >waves.txt
 
-Then rearrage as desired.
+Then edit waves.txt to rearrage the lines as desired.
+
+Attach the RC5 to the RC5 editor so its direcotry is mounted.
+
+Then execute this script.
 
 RC5_WAVDIR is the base directory of the RC5's waves. ex: "/Volumes/BOSS RC-5/ROLAND/WAVE"
-You'll have to attach the RC5 to the RC5 editor obviously.
-
-) open waves.txt
-) optionally, save the RCV_WAVDIR/00N_1 contents to a local directory 
-) optionally, clear the RCV_WAVDIR/00N_1 directories 
-) copy the local wav files named in line N to the RCV_WAVDIR/00N_1 directory
 '''
 
 from __future__ import print_function
 import os, shutil, glob, copy, sys
 
-RC5_WAV_DIR = "/Volumes/BOSS\ RC-5/ROLAND/WAV"
+RC5_WAV_DIR = "/Volumes/BOSS RC-5/ROLAND/WAVE/"
 WAVE_FILE = "waves.txt"
 
 def getInput():
@@ -90,22 +88,18 @@ if( ch == 'y' or ch == "Y" ):
   # make backupdir
   # Copy all waves locally and create a waves.txt
 
-  # Save waves.txt
-
 # clear directory
 print( "Deleting wav files." )
 
 for fileIndex in range( 1, 99 ):
-  dirName = RC5_WAV_DIR
-  dirName += "00" if( fileIndex < 10 ) else "0"
-  dirName += str( fileIndex ) + "_1";
+  dirName = RC5_WAV_DIR + ( "00" if( fileIndex < 10 ) else "0" ) + str( fileIndex ) + "_1";
 
   for filename in os.listdir( dirName ):
     file_path = os.path.join( dirName, filename )
     try:
       if os.path.isfile( file_path ):
-        # os.unlink( file_path )
-        print( "Deleting:" + file_path );
+        os.unlink( file_path )
+        print( "Deleting:" + file_path )
       else:
         print( "Unexpected:" + file_path )
     except Exception as e:
@@ -118,13 +112,18 @@ sf.close()
 fileIndex = 0
 
 for line in fLines:
-  print( line )
   fileIndex += 1
-  if os.path.isfile( line ):
-    print( "Copying:" + line )
-  else:
-    print( "File not found:" + line );
+  if( fileIndex > 99 ):
+    print( "Max lines exceeded." )
+    break
+  fileName = line[ 0 : -1 ]
+  if len( fileName ) > 4: # Skip blank lines. Shortest is "X.wav"
+    if os.path.isfile( fileName ):
+      print( "Copying:" + fileName )
+      dirName = RC5_WAV_DIR + ( "00" if( fileIndex < 10 ) else "0" ) + str( fileIndex ) + "_1";
+      shutil.copy( fileName, dirName )
+      # destDir = RC5_WAV_DIR + 
+    else:
+      print( "? #" + fileIndex + " " + fileName )
 
- print( "Complete." )
-
-  # destDir = RC5_WAV_DIR + 
+print( "Complete." )
