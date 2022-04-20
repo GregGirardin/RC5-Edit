@@ -79,7 +79,8 @@ var rhyStops = [ "Off", "Loop Stop", "Rec End" ];
 var rhyCounts = [ "Off", "1M" ];
 var rhyOffOn = [ "Off", "On" ];
 var rhyTones = [ "-10", "-9", "-8", "-7", "-6", "-5", "-4", "-3", "-2", "-1",
-                 "0", "+1", "+2", "+3", "+4", "+5", "+6", "+7", "+8", "+9", "+10" ];
+                   "0",
+                  "+1", "+2", "+3", "+4", "+5", "+6", "+7", "+8", "+9", "+10" ];
 
 //////////////////////////// //////////////////////////// ////////////////////////////
 //////////////////////////// //////////////////////////// ////////////////////////////
@@ -184,7 +185,6 @@ function dropElem( ev )
     console.log( "Unhandled element move." );
 }
 
-
 function genDropDown( dispString, id, value, valTable )
 {
   var genHtml = dispString + "<select id='" + id + "'>";
@@ -232,45 +232,49 @@ function generateConfigHTML()
 
     memString += loopName;
 
-    //tempHtml += "<button class='accordion' id='accord" + labelSuffix + "'>" + memString + "</button>\n";
+    tempHtml += "<button id='accord." +
+                labelSuffix +
+                "' class='accordion' draggable='true' " +
+                "ondrop='dropElem( event )' ondragover='allowDrop( event )' ondragstart='dragElem( event )'>" +
+                memString +
+                "</button>\n";
 
-     tempHtml += "<button id='accord." + labelSuffix + "' class='accordion' draggable='true' " +
-                 "ondrop='dropElem( event )' ondragover='allowDrop( event )' ondragstart='dragElem( event )'>" + memString + "</button>\n";
+    var elem            = entry.getElementsByTagName( "TRACK1" );
+    var PlyLvl          = parseInt( elem[ 0 ].childNodes[  3 ].innerHTML );
+    var Pan             = parseInt( elem[ 0 ].childNodes[  5 ].innerHTML );
+    var One             = parseInt( elem[ 0 ].childNodes[  7 ].innerHTML );
+    console.log( "1. ", One ); // gmg
+    var StrtMod         = parseInt( elem[ 0 ].childNodes[  9 ].innerHTML );
+    var StpMod          = parseInt( elem[ 0 ].childNodes[ 11 ].innerHTML );
+    var MeasLen         = parseInt( elem[ 0 ].childNodes[ 17 ].innerHTML );
+    var RecTmp          = parseInt( elem[ 0 ].childNodes[ 21 ].innerHTML );
+    var WavLen          = parseInt( elem[ 0 ].childNodes[ 25 ].innerHTML );
 
-    var elem    = entry.getElementsByTagName( "TRACK1" );
-    var PlyLvl  = parseInt( elem[ 0 ].childNodes[  3 ].innerHTML );
-    var Pan     = parseInt( elem[ 0 ].childNodes[  5 ].innerHTML );
-    var One     = parseInt( elem[ 0 ].childNodes[  7 ].innerHTML );
-    var StrtMod = parseInt( elem[ 0 ].childNodes[  9 ].innerHTML );
-    var StpMod  = parseInt( elem[ 0 ].childNodes[ 11 ].innerHTML );
-    var MeasLen = parseInt( elem[ 0 ].childNodes[ 17 ].innerHTML );
-    var RecTmp  = parseInt( elem[ 0 ].childNodes[ 21 ].innerHTML );
-    var WavLen  = parseInt( elem[ 0 ].childNodes[ 25 ].innerHTML );
-    var elem      = entry.getElementsByTagName( "MASTER" );
-    var Tempo     = parseInt( elem[ 0 ].childNodes[ 1 ].innerHTML );
-    // var DubMode   = parseInt( elem[ 0 ].childNodes[ 3 ].innerHTML );
-    var FadeTime  = parseInt( elem[ 0 ].childNodes[ 9 ].innerHTML );
+    var elem            = entry.getElementsByTagName( "MASTER" );
+    var Tempo           = parseInt( elem[ 0 ].childNodes[  1 ].innerHTML );
+ // var DubMode = parseInt( elem[ 0 ].childNodes[ 3 ].innerHTML );
+    var FadeTime        = parseInt( elem[ 0 ].childNodes[  9 ].innerHTML );
 
-    var elem = entry.getElementsByTagName( "RHYTHM" );
-    var rhyLevel = parseInt( elem[ 0 ].childNodes[ 1 ].innerHTML );
-    var rhyReverb = parseInt( elem[ 0 ].childNodes[ 3 ].innerHTML );
-    var rhyPattern = parseInt( elem[ 0 ].childNodes[ 5 ].innerHTML );
-    var rhyVariation = parseInt( elem[ 0 ].childNodes[ 7 ].innerHTML );
-    var rhyVariationChg = parseInt( elem[ 0 ].childNodes[ 9 ].innerHTML );
-    var rhyKit = parseInt( elem[ 0 ].childNodes[ 11 ].innerHTML );
-    // var rhyBeat = parseInt( elem[ 0 ].childNodes[ 13 ].innerHTML );
-    var rhyFill = parseInt( elem[ 0 ].childNodes[ 15 ].innerHTML );
-    var rhyPart1 = parseInt( elem[ 0 ].childNodes[ 17 ].innerHTML );
-    var rhyPart2 = parseInt( elem[ 0 ].childNodes[ 19 ].innerHTML );
-    var rhyPart3 = parseInt( elem[ 0 ].childNodes[ 21 ].innerHTML );
-    var rhyPart4 = parseInt( elem[ 0 ].childNodes[ 23 ].innerHTML );
-    var rhyRecCount = parseInt( elem[ 0 ].childNodes[ 25 ].innerHTML );
-    var rhyPlayCount = parseInt( elem[ 0 ].childNodes[ 27 ].innerHTML );
-    var rhyStart = parseInt( elem[ 0 ].childNodes[ 29 ].innerHTML );
-    var rhyStop = parseInt( elem[ 0 ].childNodes[ 31 ].innerHTML );
-    var rhyToneLow = parseInt( elem[ 0 ].childNodes[ 33 ].innerHTML );
-    var rhyToneHigh = parseInt( elem[ 0 ].childNodes[ 35 ].innerHTML );
-    var rhyState = parseInt( elem[ 0 ].childNodes[ 37 ].innerHTML );
+    var elem            = entry.getElementsByTagName( "RHYTHM" );
+    var rhyLevel        = parseInt( elem[ 0 ].childNodes[  1 ].innerHTML );
+    var rhyReverb       = parseInt( elem[ 0 ].childNodes[  3 ].innerHTML );
+    var rhyPattern      = parseInt( elem[ 0 ].childNodes[  5 ].innerHTML );
+    var rhyVariation    = parseInt( elem[ 0 ].childNodes[  7 ].innerHTML );
+    var rhyVariationChg = parseInt( elem[ 0 ].childNodes[  9 ].innerHTML );
+    var rhyKit          = parseInt( elem[ 0 ].childNodes[ 11 ].innerHTML );
+ // var rhyBeat = parseInt( elem[ 0 ].childNodes[ 13 ].innerHTML );
+    var rhyFill         = parseInt( elem[ 0 ].childNodes[ 15 ].innerHTML );
+    var rhyPart1        = parseInt( elem[ 0 ].childNodes[ 17 ].innerHTML );
+    var rhyPart2        = parseInt( elem[ 0 ].childNodes[ 19 ].innerHTML );
+    var rhyPart3        = parseInt( elem[ 0 ].childNodes[ 21 ].innerHTML );
+    var rhyPart4        = parseInt( elem[ 0 ].childNodes[ 23 ].innerHTML );
+    var rhyRecCount     = parseInt( elem[ 0 ].childNodes[ 25 ].innerHTML );
+    var rhyPlayCount    = parseInt( elem[ 0 ].childNodes[ 27 ].innerHTML );
+    var rhyStart        = parseInt( elem[ 0 ].childNodes[ 29 ].innerHTML );
+    var rhyStop         = parseInt( elem[ 0 ].childNodes[ 31 ].innerHTML );
+    var rhyToneLow      = parseInt( elem[ 0 ].childNodes[ 33 ].innerHTML );
+    var rhyToneHigh     = parseInt( elem[ 0 ].childNodes[ 35 ].innerHTML );
+    var rhyState        = parseInt( elem[ 0 ].childNodes[ 37 ].innerHTML );
 
     tempHtml += "<div class='panel'>\n";
     tempHtml += "<b>- Sample -</b><br>";
@@ -404,10 +408,10 @@ function syncToTempo( memString )
   elem.value = waveLenAdj;
 }
 
-// Given a DOM element that has in int value:
-// Constrain the value
-// Update the DOM element
-// Return a string of its value.
+// Given a DOM element that has an int value:
+//   Constrain the value
+//   Update the DOM element
+//   Return a string of its value.
 function constrainValue( elemId, min, max, factor=1 )
 {
   var value = document.getElementById( elemId ).value;
@@ -470,7 +474,7 @@ function saveConfig()
     elem = entry.getElementsByTagName( "TRACK1" );
     elem[ 0 ].childNodes[ 3 ].innerHTML = constrainValue( "samplePlyLvl" + labelSuffix, 0, 200 );
     elem[ 0 ].childNodes[ 5 ].innerHTML = constrainValue( "samplePan" + labelSuffix, 0, 100 );
-    elem[ 0 ].childNodes[ 7 ].innerHTML = ( document.getElementById( "sampleOne" + labelSuffix ).value.toString() == "on" ) ? "1" : "0";
+    elem[ 0 ].childNodes[ 7 ].innerHTML = ( document.getElementById( "sampleOne" + labelSuffix ).checked ) ? "1" : "0";
     elem[ 0 ].childNodes[ 9 ].innerHTML = getEntryIx( startModes, document.getElementById( "sampleStartMode" + labelSuffix ).value.toString() ).toString();
     elem[ 0 ].childNodes[ 11 ].innerHTML = getEntryIx( stopModes, document.getElementById( "sampleStopMode" + labelSuffix ).value.toString() ).toString();
     elem[ 0 ].childNodes[ 17 ].innerHTML = constrainValue( "sampleMeasLen" + labelSuffix, 1, 4096 );
