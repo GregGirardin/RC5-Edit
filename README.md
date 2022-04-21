@@ -21,3 +21,6 @@ I save the config as both "MEMORY1.RC0" and "MEMORY2.RC0" so they are identical.
 The "Convert to Async" feature will tweak a few parameters for samples
 that have no tempo (voice, ambient pads, etc). Otherwise the RC-5 may
 have some playback artifacts it is time stretching the sample to the current tempo.
+
+rc5Copy.py is a python script that will copy audio files from the current directory
+to a mounted RC5 unit. See the file for description.

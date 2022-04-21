@@ -77,7 +77,9 @@ for line in fLines:
       dirName = RC5_WAV_DIR + ( "00" if( fileIndex < 10 ) else "0" ) + str( fileIndex ) + "_1";
       shutil.copy( fileName, dirName )
     else:
-      print( "? #" + fileIndex + " " + fileName )
+      print( "? #" + str( fileIndex ) + " " + fileName )
+      print( "Failed." )
+      exit( 0 )
 
 if os.path.isfile( "MEMORY1.RC0" ):
   print( "Copying MEMORY1.RC0" )
